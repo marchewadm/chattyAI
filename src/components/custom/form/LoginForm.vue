@@ -13,7 +13,7 @@ const { authFormType } = storeToRefs(authStore);
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
+  <div class="flex items-center justify-center z-50">
     <div class="mx-auto grid w-[350px] gap-6">
       <div class="grid gap-2 text-center">
         <h1 class="text-3xl font-bold">Welcome back</h1>
