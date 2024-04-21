@@ -6,7 +6,7 @@ module.exports = {
   env: {
     node: true
   },
-  'extends': [
+  extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/eslint-config-typescript',
@@ -16,6 +16,6 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    'semi': ['warn', 'always']
+    semi: ['warn', 'always']
   }
 };
