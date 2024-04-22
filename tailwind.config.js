@@ -22,6 +22,9 @@ module.exports = {
       }
     },
     extend: {
+      screens: {
+        md: '850px'
+      },
       fontFamily: {
         sans: ['Inter', 'sans-serif']
       },

@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex items-center justify-center z-50">
+  <div class="w-4/5 py-10 mx-auto flex items-center justify-center z-50 md:w-full md:p-0">
     <div class="w-[350px] mx-auto grid gap-6">
       <div class="grid gap-2 text-center">
         <h1 class="text-3xl font-bold">

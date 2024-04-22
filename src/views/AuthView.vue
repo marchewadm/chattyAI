@@ -20,15 +20,10 @@ const { authFormType } = storeToRefs(authStore);
 </script>
 
 <template>
-  <div class="w-full min-h-screen lg:grid lg:grid-cols-2 relative">
-    <div class="p-2 grid grid-rows-auto-1fr">
-      <p>!!! LOGO PLACEHOLDER !!!</p>
-      <div class="self-center w-5/6 ml-10">
-        <AnimatedTypewriter />
-      </div>
-    </div>
-    <div class="grid grid-rows-auto-1fr">
-      <div class="p-2 flex gap-1 justify-end">
+  <div class="p-2 w-full min-h-screen relative flex flex-col">
+    <nav class="flex justify-between items-center">
+      <a href="#" class="text-2xl font-medium tracking-tighter">TestChat</a>
+      <div class="flex gap-1">
         <Button
           variant="ghost"
           @click="authFormType = authFormType === 'login' ? 'register' : 'login'"
@@ -42,6 +37,13 @@ const { authFormType } = storeToRefs(authStore);
             class="h-[1.2rem] w-[1.2rem]"
           />
         </Button>
+      </div>
+    </nav>
+    <div
+      class="relative flex-grow grid items-center justify-center md:grid-cols-2 md:justify-normal md:mx-10"
+    >
+      <div class="w-5/6 hidden md:block">
+        <AnimatedTypewriter />
       </div>
       <FormLogin v-if="authFormType === 'login'" />
       <FormRegister v-else-if="authFormType === 'register'" />
