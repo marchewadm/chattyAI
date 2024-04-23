@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseFormAuth from '@/components/custom/form/auth/BaseFormAuth.vue';
+import ButtonThirdPartyAccess from '@/components/custom/button/ButtonThirdPartyAccess.vue';
 
-import { Icon } from '@iconify/vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -37,14 +37,8 @@ import { Button } from '@/components/ui/button';
           <span class="bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
       </div>
-      <Button variant="outline" class="w-full flex gap-2 items-center">
-        <Icon icon="ion:logo-google" class="h-[1.2rem] w-[1.2rem]" />
-        <span>Sign up with Google</span>
-      </Button>
-      <Button variant="outline" class="w-full flex gap-2 items-center">
-        <Icon icon="ion:logo-github" class="h-[1.2rem] w-[1.2rem]" />
-        <span>Sign up with GitHub</span>
-      </Button>
+      <ButtonThirdPartyAccess iconName="logo-google" text="Sign up with Google" />
+      <ButtonThirdPartyAccess iconName="logo-github" text="Sign up with GitHub" />
     </template>
     <template #formFooterText>Already have an account? </template>
     <template #formFooterButton>Sign in</template>

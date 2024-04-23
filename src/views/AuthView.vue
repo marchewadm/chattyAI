@@ -4,17 +4,13 @@ import FormRegister from '@/components/custom/form/auth/FormRegister.vue';
 import FormResetPassword from '@/components/custom/form/auth/FormResetPassword.vue';
 import AnimatedWave from '@/components/custom/animated/AnimatedWave.vue';
 import AnimatedTypewriter from '@/components/custom/animated/AnimatedTypewriter.vue';
+import ButtonColorMode from '@/components/custom/button/ButtonColorMode.vue';
 
-import { Icon } from '@iconify/vue';
 import { Button } from '@/components/ui/button';
-
-import { useColorMode } from '@vueuse/core';
-import { toggleColorMode } from '@/utils/utils';
 
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
 
-const mode = useColorMode();
 const authStore = useAuthStore();
 const { authFormType } = storeToRefs(authStore);
 </script>
@@ -31,12 +27,7 @@ const { authFormType } = storeToRefs(authStore);
           <template v-if="authFormType === 'login'">Sign up</template>
           <template v-else>Sign in</template>
         </Button>
-        <Button variant="ghost" @click="toggleColorMode">
-          <Icon
-            :icon="mode === 'light' ? 'ion:moon-outline' : 'ion:sunny-outline'"
-            class="h-[1.2rem] w-[1.2rem]"
-          />
-        </Button>
+        <ButtonColorMode />
       </div>
     </nav>
     <div
