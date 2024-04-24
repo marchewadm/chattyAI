@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
         iconName="open-outline"
         size="default"
         text="New chat"
-        textClass="text-base font-semibold"
+        textClass="text-base tracking-tighter"
         class="w-full justify-between"
       />
     </div>
@@ -30,16 +30,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
       <ButtonColorMode />
       <ButtonIcon iconName="power-outline" />
     </div>
-    <div
+    <button
       class="py-6 pl-2 pr-6 cursor-pointer absolute left-full top-1/2 -translate-y-1/2 toggle-navbar"
     >
       <div
-        class="border-l-2 h-2 transition-transform duration-150 rounded-t-full border-l-secondary-foreground"
+        class="border-l-2 h-2 transition-transform duration-200 rounded-t-full border-l-secondary-foreground"
       ></div>
       <div
-        class="border-l-2 h-2 transition-transform duration-150 rounded-b-full border-l-secondary-foreground"
+        class="border-l-2 h-2 transition-transform duration-200 rounded-b-full border-l-secondary-foreground"
       ></div>
-    </div>
+    </button>
   </nav>
 </template>
 

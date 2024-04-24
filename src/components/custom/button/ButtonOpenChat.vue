@@ -11,6 +11,6 @@ defineProps({
 
 <template>
   <Button variant="ghost" class="justify-start">
-    <span class="truncate">{{ chatTitle }}</span>
+    <span class="truncate tracking-tight">{{ chatTitle }}</span>
   </Button>
 </template>
