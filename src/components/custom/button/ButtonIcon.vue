@@ -13,6 +13,10 @@ defineProps({
     type: String,
     required: true
   },
+  iconClass: {
+    type: String,
+    default: 'h-[1.2rem] w-[1.2rem]'
+  },
   isIconFirst: {
     type: Boolean,
     default: false
@@ -36,8 +40,8 @@ defineProps({
 
 <template>
   <Button :variant="variant" :size="size">
-    <Icon :icon="`${iconPrefix}:${iconName}`" class="h-[1.2rem] w-[1.2rem]" v-if="isIconFirst" />
+    <Icon :icon="`${iconPrefix}:${iconName}`" :class="iconClass" v-if="isIconFirst" />
     <span :="{ class: textClass }" v-if="text">{{ text }}</span>
-    <Icon :icon="`${iconPrefix}:${iconName}`" class="h-[1.2rem] w-[1.2rem]" v-if="!isIconFirst" />
+    <Icon :icon="`${iconPrefix}:${iconName}`" :class="iconClass" v-if="!isIconFirst" />
   </Button>
 </template>

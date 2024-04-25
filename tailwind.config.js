@@ -28,6 +28,9 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif']
       },
+      boxShadow: {
+        right: '8px 0 8px -8px rgba(0, 0, 0, 0.1)'
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
