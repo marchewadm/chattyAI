@@ -2,7 +2,7 @@
 import ButtonColorMode from '@/components/custom/button/ButtonColorMode.vue';
 import ButtonOpenChat from '@/components/custom/button/ButtonOpenChat.vue';
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
-import DialogSettings from '@/components/custom/dialog/DialogSettings.vue';
+import DialogSettings from '@/components/custom/dialog/DialogSettings/DialogSettings.vue';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 </script>

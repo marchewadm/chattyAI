@@ -6,6 +6,7 @@ import ButtonSelectChatModel from '@/components/custom/button/ButtonSelectChatMo
 
 import typewriterData from '@/assets/typewriterData.json';
 
+import { Toaster } from '@/components/ui/toast';
 import { Textarea } from '@/components/ui/textarea';
 
 import { onBeforeMount, onMounted, ref } from 'vue';
@@ -38,8 +39,6 @@ function createButtonTopicSuggestionData() {
     }
   }
 }
-
-import { Toaster } from '@/components/ui/toast';
 
 onBeforeMount(() => {
   createButtonTopicSuggestionData();
