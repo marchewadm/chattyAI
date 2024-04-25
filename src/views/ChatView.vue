@@ -39,6 +39,8 @@ function createButtonTopicSuggestionData() {
   }
 }
 
+import { Toaster } from '@/components/ui/toast';
+
 onBeforeMount(() => {
   createButtonTopicSuggestionData();
 });
@@ -71,6 +73,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Toaster />
   <div class="min-h-screen grid layout">
     <NavBar class="shadow-right" />
     <div class="grid container-layout dark:bg-gray-900">

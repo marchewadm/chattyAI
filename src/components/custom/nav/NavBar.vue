@@ -2,6 +2,7 @@
 import ButtonColorMode from '@/components/custom/button/ButtonColorMode.vue';
 import ButtonOpenChat from '@/components/custom/button/ButtonOpenChat.vue';
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
+import DialogSettings from '@/components/custom/dialog/DialogSettings.vue';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 </script>
@@ -26,7 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
         <AvatarImage src="" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
-      <ButtonIcon iconName="settings-outline" />
+      <DialogSettings />
       <ButtonColorMode />
       <ButtonIcon iconName="power-outline" />
     </div>
