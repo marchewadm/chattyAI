@@ -17,7 +17,7 @@ const handleToast = () => {
 </script>
 
 <template>
-  <Tabs default-value="account" class="w-[400px]">
+  <Tabs default-value="account">
     <TabsList class="grid w-full grid-cols-2">
       <TabsTrigger value="account">Account</TabsTrigger>
       <TabsTrigger value="password">Password</TabsTrigger>

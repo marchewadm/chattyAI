@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
 import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,8 @@ import {
 } from '@/components/ui/command';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Status {
   value: string;
@@ -43,9 +46,9 @@ function onStatusSelect(status: Status) {
 </script>
 
 <template>
-  <div>
-    <div class="flex flex-col gap-2">
-      <div class="flex gap-4">
+  <ScrollArea class="h-full">
+    <div class="flex flex-col gap-2 mb-4 py-1 pl-1 pr-3">
+      <div class="grid api-keys-layout gap-2 items-center">
         <Input type="text" placeholder="Your API Key" />
         <div>
           <UseTemplate>
@@ -91,10 +94,18 @@ function onStatusSelect(status: Status) {
             </DrawerContent>
           </Drawer>
         </div>
+        <ButtonIcon iconName="add-outline" class="w-8 h-8" size="icon" />
+        <ButtonIcon iconName="trash-outline" class="w-8 h-8" size="icon" variant="destructive" />
       </div>
     </div>
-    <div class="flex justify-end mt-4">
+    <div class="flex justify-end pr-3">
       <Button type="submit">Save changes</Button>
     </div>
-  </div>
+  </ScrollArea>
 </template>
+
+<style scoped>
+.api-keys-layout {
+  grid-template-columns: 1fr auto auto auto;
+}
+</style>
