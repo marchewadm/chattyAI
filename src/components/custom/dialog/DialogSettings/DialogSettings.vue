@@ -4,14 +4,11 @@ import DialogSettingsGeneral from '@/components/custom/dialog/DialogSettings/com
 import DialogSettingsProfile from '@/components/custom/dialog/DialogSettings/components/DialogSettingsProfile.vue';
 import DialogSettingsApiKeys from '@/components/custom/dialog/DialogSettings/components/DialogSettingsApiKeys.vue';
 
-import { useToast } from '@/components/ui/toast';
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -19,18 +16,9 @@ import {
 
 import { ref } from 'vue';
 
-const { toast } = useToast();
 const activeTab = ref('general');
 
-const handleToast = () => {
-  toast({
-    title: 'Success',
-    description: 'Your settings have been saved successfully!'
-  });
-};
-
 // TODO: Add aria-label;
-// v-show instead of v-if MAYBE???
 </script>
 
 <template>
@@ -83,9 +71,6 @@ const handleToast = () => {
         <DialogSettingsProfile v-if="activeTab === 'profile'" />
         <DialogSettingsApiKeys v-if="activeTab === 'apiKeys'" />
       </div>
-      <DialogFooter>
-        <!-- <Button type="submit" @click="handleToast">Save changes</Button> -->
-      </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>

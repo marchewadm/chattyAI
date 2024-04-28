@@ -55,15 +55,16 @@ const apiKeys = ref<ApiKey[]>([
   }
 ]);
 
-function onStatusSelect(status: Status, id: number) {
+const onStatusSelect = (status: Status, id: number) => {
   const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
+
   if (index !== -1) {
     apiKeys.value[index].status = status;
     apiKeys.value[index].isOpen = false;
   }
-}
+};
 
-function addApiKey(apiKey: string | undefined, status: Status | null) {
+const addApiKey = (apiKey: string | undefined, status: Status | null) => {
   if (apiKey && status) {
     apiKeys.value.push({
       id: apiKeys.value.length,
@@ -78,15 +79,15 @@ function addApiKey(apiKey: string | undefined, status: Status | null) {
       variant: 'destructive'
     });
   }
-}
+};
 
-function removeApiKey(id: number) {
+const removeApiKey = (id: number) => {
   const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
 
   if (index !== -1) {
     apiKeys.value.splice(index, 1);
   }
-}
+};
 </script>
 
 <template>
@@ -159,7 +160,9 @@ function removeApiKey(id: number) {
         />
       </div>
     </div>
-    <div></div>
+    <div class="flex justify-end pr-3">
+      <Button>Save changes</Button>
+    </div>
   </ScrollArea>
 </template>
 
