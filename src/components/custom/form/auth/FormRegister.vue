@@ -2,9 +2,48 @@
 import BaseFormAuth from '@/components/custom/form/auth/BaseFormAuth.vue';
 import ButtonThirdPartyAccess from '@/components/custom/button/ButtonThirdPartyAccess.vue';
 
+import { useToast } from '@/components/ui/toast';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+import { useForm } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/zod';
+import * as z from 'zod';
+
+const { toast } = useToast();
+
+const formSchema = toTypedSchema(
+  z
+    .object({
+      name: z
+        .string()
+        .min(1, { message: 'This field has to be filled' })
+        .max(50, { message: 'Name must be at most 50 characters long' }),
+      email: z
+        .string()
+        .min(1, { message: 'This field has to be filled' })
+        .email('This is not a valid email'),
+      password: z.string().min(8, { message: 'Password must be at least 8 characters long' }),
+      password2: z.string().min(8, { message: 'Password must be at least 8 characters long' })
+    })
+    .refine((data) => data.password === data.password2, {
+      message: 'Passwords do not match',
+      path: ['password2']
+    })
+);
+
+const form = useForm({
+  validationSchema: formSchema
+});
+
+const onSubmit = form.handleSubmit((values) => {
+  console.log(`Form submitted!\nValues: ${JSON.stringify(values)}`);
+  toast({
+    title: 'Success',
+    description: 'An email has been sent to you with instructions to activate your account'
+  });
+});
 </script>
 
 <template>
@@ -12,23 +51,48 @@ import { Button } from '@/components/ui/button';
     <template #formHeader>Create an account</template>
     <template #formSubHeader>Fill out the form below to create your account</template>
     <template #formBody>
-      <div class="grid gap-2">
-        <Label for="name">What is your name?</Label>
-        <Input id="name" type="text" placeholder="Jane" required />
-      </div>
-      <div class="grid gap-2">
-        <Label for="email">Email</Label>
-        <Input id="email" type="email" placeholder="jane.doe@example.com" required />
-      </div>
-      <div class="grid gap-2">
-        <Label for="password">Password</Label>
-        <Input id="password" type="password" required />
-      </div>
-      <div class="grid gap-2">
-        <Label for="password2">Confirm your password</Label>
-        <Input id="password2" type="password" required />
-      </div>
-      <Button type="submit" class="w-full">Sign up</Button>
+      <form @submit="onSubmit" class="grid gap-4">
+        <FormField v-slot="{ componentField }" name="name">
+          <FormItem>
+            <FormLabel>What is your name?</FormLabel>
+            <FormControl>
+              <Input type="text" placeholder="Jane" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField v-slot="{ componentField }" name="email">
+          <FormItem>
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input type="email" placeholder="jane.doe@example.com" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField v-slot="{ componentField }" name="password">
+          <FormItem>
+            <FormLabel>Password</FormLabel>
+            <FormControl>
+              <Input type="password" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField v-slot="{ componentField }" name="password2">
+          <FormItem>
+            <FormLabel>Confirm password</FormLabel>
+            <FormControl>
+              <Input type="password" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <Button type="submit" class="w-full">Sign up</Button>
+      </form>
       <div class="relative">
         <div class="absolute inset-0 flex items-center">
           <span class="w-full border-t" />

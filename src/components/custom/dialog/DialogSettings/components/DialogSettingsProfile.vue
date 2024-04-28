@@ -11,7 +11,7 @@ const { toast } = useToast();
 const handleToast = () => {
   toast({
     title: 'Success',
-    description: 'Your profile has been updated successfully!'
+    description: 'Your profile has been updated successfully'
   });
 };
 </script>
