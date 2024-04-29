@@ -8,18 +8,11 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
-import * as z from 'zod';
+import resetPasswordSchema from './schemas/resetPasswordSchema';
 
 const { toast } = useToast();
 
-const formSchema = toTypedSchema(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: 'This field has to be filled' })
-      .email('This is not a valid email')
-  })
-);
+const formSchema = toTypedSchema(resetPasswordSchema);
 
 const form = useForm({
   validationSchema: formSchema

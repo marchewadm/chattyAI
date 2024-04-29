@@ -11,17 +11,9 @@ import { handleAuthFormTypeChange } from '@/utils/utils';
 
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
-import * as z from 'zod';
+import loginSchema from './schemas/loginSchema';
 
-const formSchema = toTypedSchema(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: 'This field has to be filled' })
-      .email('This is not a valid email'),
-    password: z.string().min(8, { message: 'Password must be at least 8 characters long' })
-  })
-);
+const formSchema = toTypedSchema(loginSchema);
 
 const form = useForm({
   validationSchema: formSchema

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import FormProfileAccount from '@/components/custom/form/dialogSettings/FormProfileAccount.vue';
+import FormProfilePassword from '@/components/custom/form/dialogSettings/FormProfilePassword.vue';
+
 import { useToast } from '@/components/ui/toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +29,8 @@ const handleToast = () => {
       <p class="text-xs text-muted-foreground">
         Make changes to your account here. Click save when you're done.
       </p>
-      <div class="flex flex-col gap-4 mt-4">
+      <FormProfileAccount />
+      <!-- <div class="flex flex-col gap-4 mt-4">
         <Avatar class="w-20 h-20 self-center">
           <AvatarImage src="" />
           <AvatarFallback>JD</AvatarFallback>
@@ -39,13 +43,14 @@ const handleToast = () => {
           <Label for="email">Email</Label>
           <Input id="email" type="email" placeholder="jane.doe@example.com" required />
         </div>
-      </div>
+      </div> -->
     </TabsContent>
     <TabsContent value="password">
       <p class="text-xs text-muted-foreground">
         Change your password here. After saving, you'll be logged out.
       </p>
-      <div class="flex flex-col gap-4 mt-4">
+      <FormProfilePassword />
+      <!-- <div class="flex flex-col gap-4 mt-4">
         <div class="grid gap-2">
           <Label for="currentPassword">Current password</Label>
           <Input id="currentPassword" type="password" required />
@@ -58,10 +63,10 @@ const handleToast = () => {
           <Label for="newPassword2">Confirm password</Label>
           <Input id="newPassword2" type="password" required />
         </div>
-      </div>
+      </div> -->
     </TabsContent>
-    <div class="flex justify-end mt-4">
+    <!-- <div class="flex justify-end mt-4">
       <Button type="submit" @click="handleToast">Save changes</Button>
-    </div>
+    </div> -->
   </Tabs>
 </template>
