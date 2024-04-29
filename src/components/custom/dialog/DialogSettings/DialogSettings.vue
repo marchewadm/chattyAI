@@ -34,7 +34,7 @@ const activeTab = ref('general');
         </DialogDescription>
       </DialogHeader>
       <Separator />
-      <div class="grid settings-layout h-[350px]">
+      <div class="grid settings-layout h-[360px]">
         <div class="flex flex-col gap-y-2 mr-6">
           <ButtonIcon
             iconName="settings-outline"
