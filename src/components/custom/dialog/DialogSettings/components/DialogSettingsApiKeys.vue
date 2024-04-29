@@ -75,7 +75,7 @@ const addApiKey = (apiKey: string | undefined, status: Status | null) => {
   } else {
     toast({
       title: 'Error',
-      description: 'Please provide a valid API key first!',
+      description: 'Please provide a valid API key first',
       variant: 'destructive'
     });
   }
