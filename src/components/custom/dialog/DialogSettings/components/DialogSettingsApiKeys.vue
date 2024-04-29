@@ -1,8 +1,12 @@
-<script lang="ts" setup>
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
-import { ref } from 'vue';
+<script setup lang="ts">
+import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/toast';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -11,13 +15,25 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
+import { ref } from 'vue';
 
 interface Status {
   value: string;
   label: string;
 }
+
+interface ApiKey {
+  id: number;
+  apiKey: string | undefined;
+  status: Status | null;
+  isOpen: boolean;
+}
+
+const { toast } = useToast();
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
+const isDesktop = useMediaQuery('(min-width: 768px');
 
 const statuses: Status[] = [
   {
@@ -30,25 +46,61 @@ const statuses: Status[] = [
   }
 ];
 
-const [UseTemplate, StatusList] = createReusableTemplate();
-const isDesktop = useMediaQuery('(min-width: 768px)');
+const apiKeys = ref<ApiKey[]>([
+  {
+    id: 0,
+    apiKey: undefined,
+    status: null,
+    isOpen: false
+  }
+]);
 
-const isOpen = ref(false);
-const selectedStatus = ref<Status | null>(null);
+const onStatusSelect = (status: Status, id: number) => {
+  const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
 
-function onStatusSelect(status: Status) {
-  selectedStatus.value = status;
-  isOpen.value = false;
-}
+  if (index !== -1) {
+    apiKeys.value[index].status = status;
+    apiKeys.value[index].isOpen = false;
+  }
+};
+
+const addApiKey = (apiKey: string | undefined, status: Status | null) => {
+  if (apiKey && status) {
+    apiKeys.value.push({
+      id: apiKeys.value.length,
+      apiKey: undefined,
+      status: null,
+      isOpen: false
+    });
+  } else {
+    toast({
+      title: 'Error',
+      description: 'Please provide a valid API key first',
+      variant: 'destructive'
+    });
+  }
+};
+
+const removeApiKey = (id: number) => {
+  const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
+
+  if (index !== -1) {
+    apiKeys.value.splice(index, 1);
+  }
+};
 </script>
 
 <template>
-  <div>
-    <div class="flex flex-col gap-2">
-      <div class="flex gap-4">
-        <Input type="text" placeholder="Your API Key" />
+  <ScrollArea class="h-full">
+    <div class="flex flex-col gap-2 mb-4 py-1 pl-1 pr-3">
+      <div
+        class="grid api-keys-layout gap-2 items-center"
+        v-for="apiKey in apiKeys"
+        :key="apiKey.id"
+      >
+        <Input type="text" placeholder="Your API Key" v-model="apiKey.apiKey" required />
         <div>
-          <UseTemplate>
+          <DefineTemplate>
             <Command>
               <CommandInput placeholder="Filter models..." />
               <CommandList>
@@ -58,43 +110,64 @@ function onStatusSelect(status: Status) {
                     v-for="status of statuses"
                     :key="status.value"
                     :value="status.value"
-                    @select="onStatusSelect(status)"
+                    @select="onStatusSelect(status, apiKey.id)"
                   >
                     {{ status.label }}
                   </CommandItem>
                 </CommandGroup>
               </CommandList>
             </Command>
-          </UseTemplate>
+          </DefineTemplate>
 
-          <Popover v-if="isDesktop" v-model:open="isOpen">
+          <Popover v-if="isDesktop" v-model:open="apiKey.isOpen">
             <PopoverTrigger as-child>
               <Button variant="outline" class="w-[150px] justify-start">
-                {{ selectedStatus ? selectedStatus.label : '+ Select model' }}
+                {{ apiKey.status ? apiKey.status.label : '+ Select model' }}
               </Button>
             </PopoverTrigger>
             <PopoverContent class="w-[200px] p-0" align="start">
-              <StatusList />
+              <ReuseTemplate />
             </PopoverContent>
           </Popover>
 
-          <Drawer v-else v-model:open="isOpen">
+          <Drawer v-else>
             <DrawerTrigger as-child>
               <Button variant="outline" class="w-[150px] justify-start">
-                {{ selectedStatus ? selectedStatus.label : '+ Select model' }}
+                {{ apiKey.status ? apiKey.status.label : '+ Select model' }}
               </Button>
             </DrawerTrigger>
             <DrawerContent>
               <div class="mt-4 border-t">
-                <StatusList />
+                <ReuseTemplate />
               </div>
             </DrawerContent>
           </Drawer>
         </div>
+        <ButtonIcon
+          iconName="add-outline"
+          class="w-8 h-8"
+          size="icon"
+          v-show="apiKey === apiKeys[apiKeys.length - 1]"
+          @click="addApiKey(apiKey.apiKey, apiKey.status)"
+        />
+        <ButtonIcon
+          iconName="trash-outline"
+          class="w-8 h-8"
+          size="icon"
+          variant="destructive"
+          v-show="apiKey !== apiKeys[apiKeys.length - 1]"
+          @click="removeApiKey(apiKey.id)"
+        />
       </div>
     </div>
-    <div class="flex justify-end mt-4">
-      <Button type="submit">Save changes</Button>
+    <div class="flex justify-end pr-3">
+      <Button>Save changes</Button>
     </div>
-  </div>
+  </ScrollArea>
 </template>
+
+<style scoped>
+.api-keys-layout {
+  grid-template-columns: 1fr auto auto;
+}
+</style>

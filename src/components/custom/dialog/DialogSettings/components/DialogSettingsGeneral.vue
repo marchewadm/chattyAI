@@ -17,7 +17,7 @@ const { toast } = useToast();
 const handleToast = () => {
   toast({
     title: 'Success',
-    description: 'Your chats have been deleted successfully!'
+    description: 'Your chats have been deleted successfully'
   });
 };
 </script>
