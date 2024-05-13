@@ -9,18 +9,23 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 
 import { handleAuthFormTypeChange } from '@/utils/utils';
 
+import { useRouter } from 'vue-router';
+
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import loginSchema from './schemas/loginSchema';
 
+import { loginUser } from '@/services/authenticationService';
+
 const formSchema = toTypedSchema(loginSchema);
 
+const router = useRouter();
 const form = useForm({
   validationSchema: formSchema
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log(`Form submitted!\nValues: ${JSON.stringify(values)}`);
+const onSubmit = form.handleSubmit(async (values) => {
+  await loginUser(values, router);
 });
 </script>
 
