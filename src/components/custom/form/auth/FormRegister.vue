@@ -10,7 +10,7 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import registerSchema from './schemas/registerSchema';
 
-import { createUser } from '@/services/authenticationService';
+import { createUserService } from '@/services/authenticationService';
 
 const formSchema = toTypedSchema(registerSchema);
 
@@ -19,7 +19,7 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await createUser(values);
+  await createUserService(values);
 });
 </script>
 

@@ -15,7 +15,7 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import loginSchema from './schemas/loginSchema';
 
-import { loginUser } from '@/services/authenticationService';
+import { loginUserService } from '@/services/authenticationService';
 
 const formSchema = toTypedSchema(loginSchema);
 
@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await loginUser(values, router);
+  await loginUserService(values, router);
 });
 </script>
 
