@@ -35,6 +35,11 @@ router.beforeEach((to) => {
   if (!accessToken.value && to.name !== 'Home') {
     return { name: 'Home' };
   }
+
+  // If the user is authenticated and they try to access the Home route, redirect them to the Chat route.
+  if (accessToken.value && to.name === 'Home') {
+    return { name: 'Chat' };
+  }
 });
 
 export default router;
