@@ -3,14 +3,16 @@ import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import type { UserProfileData } from '@/types/user';
 
+// Set the prefix URL for the user routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/user`;
 
 export async function getUserProfileService() {
+  const userStore = useUserStore();
+  const { setUserProfileData, $reset } = userStore;
+  const { accessToken } = storeToRefs(userStore);
+
   try {
     const url = `${prefixURL}/profile`;
-    const userStore = useUserStore();
-    const { setUserProfileData } = userStore;
-    const { accessToken } = storeToRefs(userStore);
 
     const response = await axios.get<UserProfileData>(url, {
       headers: { Authorization: `Bearer ${accessToken.value}` }
@@ -18,6 +20,8 @@ export async function getUserProfileService() {
 
     setUserProfileData(response.data);
   } catch (err) {
-    console.log(err);
+    // If the access token is invalid, reset the user store and throw an error.
+    $reset();
+    throw err;
   }
 }

@@ -9,6 +9,13 @@ export const useUserStore = defineStore('user', () => {
   const avatar = ref<string | null>(null);
   const accessToken = useStorage<string | null>('accessToken', null);
 
+  function $reset() {
+    name.value = null;
+    email.value = null;
+    avatar.value = null;
+    accessToken.value = null;
+  }
+
   function setAccessToken(token: string) {
     accessToken.value = token;
   }
@@ -19,5 +26,5 @@ export const useUserStore = defineStore('user', () => {
     avatar.value = userProfileData.avatar;
   }
 
-  return { name, email, avatar, accessToken, setAccessToken, setUserProfileData };
+  return { name, email, avatar, accessToken, $reset, setAccessToken, setUserProfileData };
 });
