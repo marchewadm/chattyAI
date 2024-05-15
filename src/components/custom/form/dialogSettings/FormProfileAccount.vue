@@ -11,6 +11,8 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import profileAccountSchema from './schemas/profileAccountSchema';
 
+import { updateUserProfileService } from '@/services/userService';
+
 const userStore = useUserStore();
 const { name, email, avatar } = storeToRefs(userStore);
 
@@ -24,8 +26,8 @@ const form = useForm({
   }
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log(`Form submitted!\nValues: ${JSON.stringify(values)}`);
+const onSubmit = form.handleSubmit(async (values) => {
+  await updateUserProfileService(values);
 });
 </script>
 
