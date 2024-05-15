@@ -4,14 +4,24 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
+
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import profileAccountSchema from './schemas/profileAccountSchema';
 
+const userStore = useUserStore();
+const { name, email, avatar } = storeToRefs(userStore);
+
 const formSchema = toTypedSchema(profileAccountSchema);
 
 const form = useForm({
-  validationSchema: formSchema
+  validationSchema: formSchema,
+  initialValues: {
+    name: name.value || '',
+    email: email.value || ''
+  }
 });
 
 const onSubmit = form.handleSubmit((values) => {
@@ -25,8 +35,8 @@ const onSubmit = form.handleSubmit((values) => {
       <FormItem class="mx-auto">
         <FormControl>
           <Avatar class="w-20 h-20 self-center" v-bind="componentField">
-            <AvatarImage src="" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarImage :src="avatar || ''" />
+            <AvatarFallback>{{ name?.charAt(0) }}</AvatarFallback>
           </Avatar>
         </FormControl>
         <FormMessage />

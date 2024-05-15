@@ -2,7 +2,6 @@
 import BaseFormAuth from '@/components/custom/form/auth/BaseFormAuth.vue';
 import ButtonThirdPartyAccess from '@/components/custom/button/ButtonThirdPartyAccess.vue';
 
-import { useToast } from '@/components/ui/toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -11,7 +10,7 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import registerSchema from './schemas/registerSchema';
 
-const { toast } = useToast();
+import { createUserService } from '@/services/authenticationService';
 
 const formSchema = toTypedSchema(registerSchema);
 
@@ -19,12 +18,8 @@ const form = useForm({
   validationSchema: formSchema
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log(`Form submitted!\nValues: ${JSON.stringify(values)}`);
-  toast({
-    title: 'Success',
-    description: 'An email has been sent to you with instructions to activate your account'
-  });
+const onSubmit = form.handleSubmit(async (values) => {
+  await createUserService(values);
 });
 </script>
 
