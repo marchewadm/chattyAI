@@ -3,7 +3,8 @@ import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import { useToast } from '@/components/ui/toast';
 import type { UserProfileData } from '@/types/user';
-import type { PartialProfileAccountData } from '@/types/zodInferredTypes';
+import type { PartialProfileAccountData, ProfilePasswordData } from '@/types/zodInferredTypes';
+import type { Router } from 'vue-router';
 
 // Set the prefix URL for the user routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/user`;
@@ -67,5 +68,32 @@ export async function updateUserProfileService(
     // If the access token is invalid, reset the user store and throw an error.
     $reset();
     throw err;
+  }
+}
+
+export async function updateUserPasswordService(
+  profilePasswordData: ProfilePasswordData,
+  router: Router
+) {
+  const userStore = useUserStore();
+  const { $reset } = userStore;
+  const { accessToken } = storeToRefs(userStore);
+  const { toast } = useToast();
+
+  try {
+    const url = `${prefixURL}/update-password`;
+
+    const response = await axios.patch<{ message: string }>(url, profilePasswordData, {
+      headers: { Authorization: `Bearer ${accessToken.value}` }
+    });
+
+    $reset();
+    await router.push({ name: 'Home' });
+    toast({
+      title: 'Success',
+      description: response.data.message
+    });
+  } catch (err) {
+    console.log(err);
   }
 }
