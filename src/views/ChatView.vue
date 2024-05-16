@@ -6,7 +6,6 @@ import ButtonSelectChatModel from '@/components/custom/button/ButtonSelectChatMo
 
 import typewriterData from '@/assets/typewriterData.json';
 
-import { Toaster } from '@/components/ui/toast';
 import { Textarea } from '@/components/ui/textarea';
 
 import { onBeforeMount, onMounted, ref } from 'vue';
@@ -72,7 +71,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <Toaster />
   <div class="min-h-screen grid layout">
     <NavBar class="shadow-right" />
     <div class="grid container-layout dark:bg-gray-900">

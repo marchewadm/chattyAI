@@ -16,12 +16,7 @@ const router = createRouter({
       name: 'Chat',
       component: () => import('@/views/ChatView.vue'),
       beforeEnter: async () => {
-        try {
-          await getUserProfileService();
-        } catch (err) {
-          // TODO: Maybe add a toast message here? Something like "Your session has expired. Please log in again."
-          return { name: 'Home' };
-        }
+        await getUserProfileService(router);
       }
     }
   ]

@@ -11,6 +11,10 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import profileAccountSchema from './schemas/profileAccountSchema';
 
+import { updateUserProfileService } from '@/services/userService';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const userStore = useUserStore();
 const { name, email, avatar } = storeToRefs(userStore);
 
@@ -24,8 +28,8 @@ const form = useForm({
   }
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log(`Form submitted!\nValues: ${JSON.stringify(values)}`);
+const onSubmit = form.handleSubmit(async (values) => {
+  await updateUserProfileService(values, router);
 });
 </script>
 

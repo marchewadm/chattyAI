@@ -7,7 +7,6 @@ import AnimatedTypewriter from '@/components/custom/animated/AnimatedTypewriter.
 import ButtonColorMode from '@/components/custom/button/ButtonColorMode.vue';
 
 import { Button } from '@/components/ui/button';
-import { Toaster } from '@/components/ui/toast';
 
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
@@ -17,7 +16,6 @@ const { authFormType } = storeToRefs(authStore);
 </script>
 
 <template>
-  <Toaster />
   <div class="p-2 w-full min-h-screen relative flex flex-col">
     <nav class="flex justify-between items-center">
       <a href="#" class="text-2xl font-medium tracking-tighter">TestChat</a>
