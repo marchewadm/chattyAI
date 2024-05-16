@@ -40,30 +40,20 @@ export async function updateUserProfileService(
   try {
     const url = `${prefixURL}/update-profile`;
 
-    const response = await axios.patch<PartialProfileAccountData>(url, partialProfileAccountData, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
+    const response = await axios.patch<{ message: string; name?: string }>(
+      url,
+      partialProfileAccountData,
+      {
+        headers: { Authorization: `Bearer ${accessToken.value}` }
+      }
+    );
+
+    toast({
+      title: 'Success',
+      description: response.data.message
     });
 
-    if (Object.keys(response.data).length === 0) {
-      toast({
-        title: 'Error',
-        description: 'Your profile is up to date. No changes were made.',
-        variant: 'destructive'
-      });
-    } else if (response.data.email) {
-      toast({
-        title: 'Success',
-        description:
-          "We've sent you a verification email. Please check your inbox. If you don't see it, check your spam folder or try updating your email later."
-      });
-      updateUserProfileData(response.data);
-    } else if (!response.data.email && response.data.name) {
-      toast({
-        title: 'Success',
-        description: 'Profile updated successfully.'
-      });
-      updateUserProfileData(response.data);
-    }
+    if (response.data.name) updateUserProfileData(response.data);
   } catch (err) {
     handleAxiosError(err, router);
   }
