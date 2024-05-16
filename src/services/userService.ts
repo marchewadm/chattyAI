@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import { useToast } from '@/components/ui/toast';
+import { handleAxiosError } from '@/utils/utils';
 import type { UserProfileData } from '@/types/user';
 import type { PartialProfileAccountData, ProfilePasswordData } from '@/types/zodInferredTypes';
 import type { Router } from 'vue-router';
@@ -9,9 +10,9 @@ import type { Router } from 'vue-router';
 // Set the prefix URL for the user routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/user`;
 
-export async function getUserProfileService() {
+export async function getUserProfileService(router: Router) {
   const userStore = useUserStore();
-  const { setUserProfileData, $reset } = userStore;
+  const { setUserProfileData } = userStore;
   const { accessToken } = storeToRefs(userStore);
 
   try {
@@ -23,9 +24,7 @@ export async function getUserProfileService() {
 
     setUserProfileData(response.data);
   } catch (err) {
-    // If the access token is invalid, reset the user store and throw an error.
-    $reset();
-    throw err;
+    handleAxiosError(err, router);
   }
 }
 
@@ -94,13 +93,6 @@ export async function updateUserPasswordService(
       description: response.data.message
     });
   } catch (err) {
-    // console.log(err);
-    toast({
-      title: 'Error',
-      description: 'Test',
-      variant: 'destructive'
-    });
-    $reset();
-    router.push({ name: 'Home' });
+    handleAxiosError(err, router);
   }
 }
