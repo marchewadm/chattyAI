@@ -94,6 +94,13 @@ export async function updateUserPasswordService(
       description: response.data.message
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
+    toast({
+      title: 'Error',
+      description: 'Test',
+      variant: 'destructive'
+    });
+    $reset();
+    router.push({ name: 'Home' });
   }
 }

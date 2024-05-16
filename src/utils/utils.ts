@@ -1,6 +1,7 @@
 import { useColorMode } from '@vueuse/core';
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
+
 import type { AuthFormType } from '@/types/auth';
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
