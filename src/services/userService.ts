@@ -29,10 +29,11 @@ export async function getUserProfileService(router: Router) {
 }
 
 export async function updateUserProfileService(
-  partialProfileAccountData: PartialProfileAccountData
+  partialProfileAccountData: PartialProfileAccountData,
+  router: Router
 ) {
   const userStore = useUserStore();
-  const { $reset, updateUserProfileData } = userStore;
+  const { updateUserProfileData } = userStore;
   const { accessToken } = storeToRefs(userStore);
   const { toast } = useToast();
 
@@ -64,9 +65,7 @@ export async function updateUserProfileService(
       updateUserProfileData(response.data);
     }
   } catch (err) {
-    // If the access token is invalid, reset the user store and throw an error.
-    $reset();
-    throw err;
+    handleAxiosError(err, router);
   }
 }
 
