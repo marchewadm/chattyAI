@@ -7,14 +7,19 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import profilePasswordSchema from './schemas/profilePasswordSchema';
 
+import { updateUserPasswordService } from '@/services/userService';
+import { useRouter } from 'vue-router';
+
 const formSchema = toTypedSchema(profilePasswordSchema);
+
+const router = useRouter();
 
 const form = useForm({
   validationSchema: formSchema
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log(`Form submitted!\nValues: ${JSON.stringify(values)}`);
+const onSubmit = form.handleSubmit(async (values) => {
+  await updateUserPasswordService(values, router);
 });
 </script>
 
