@@ -10,6 +10,8 @@ import type { Router } from 'vue-router';
 // Set the prefix URL for the user routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/user`;
 
+const { toast } = useToast();
+
 export async function getUserProfileService(router: Router) {
   const userStore = useUserStore();
   const { setUserProfileData } = userStore;
@@ -35,7 +37,6 @@ export async function updateUserProfileService(
   const userStore = useUserStore();
   const { updateUserProfileData } = userStore;
   const { accessToken } = storeToRefs(userStore);
-  const { toast } = useToast();
 
   try {
     const url = `${prefixURL}/update-profile`;
@@ -66,7 +67,6 @@ export async function updateUserPasswordService(
   const userStore = useUserStore();
   const { $reset } = userStore;
   const { accessToken } = storeToRefs(userStore);
-  const { toast } = useToast();
 
   try {
     const url = `${prefixURL}/update-password`;
