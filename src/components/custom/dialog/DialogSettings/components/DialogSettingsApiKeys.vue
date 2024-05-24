@@ -31,6 +31,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 interface AiModel {
   value: string;
   label: string;
+  disabled: boolean;
 }
 
 interface ApiKey {
@@ -42,12 +43,13 @@ interface ApiKey {
 // --------------------------------------------------------------
 
 // --- CONSTANTS ---
-const aiModels: AiModel[] = [
+const aiModels = ref<AiModel[]>([
   {
     value: 'gpt-3.5',
-    label: 'GPT-3.5'
+    label: 'GPT-3.5',
+    disabled: false
   }
-];
+]);
 const apiKeys = ref<ApiKey[]>([
   {
     id: 0,
@@ -64,12 +66,14 @@ const isDesktop = useMediaQuery('(min-width: 768px)');
 
 // --- FUNCTIONS ---
 const onAiModelSelect = (aiModel: AiModel, id: number) => {
-  const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
+  if (aiModel.disabled) return;
 
+  const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
   if (!(index !== -1)) return;
 
   apiKeys.value[index].aiModel = aiModel;
   apiKeys.value[index].isOpen = false;
+  aiModel.disabled = true;
 };
 
 const addApiKey = (apiKey: ApiKey) => {
@@ -99,6 +103,12 @@ const removeApiKey = (id: number) => {
   const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
 
   if (index === -1) return;
+
+  const indexAiModel = aiModels.value.findIndex(
+    (aiModel) => aiModel.value === apiKeys.value[index].aiModel?.value
+  );
+
+  aiModels.value[indexAiModel].disabled = false;
 
   apiKeys.value.splice(index, 1);
 
@@ -168,6 +178,7 @@ const onSubmit = handleSubmit((values) => {
                       v-for="aiModel in aiModels"
                       :key="aiModel.value"
                       :value="aiModel.value"
+                      :disabled="aiModel.disabled"
                       @select="onAiModelSelect(aiModel, apiKey.id)"
                     >
                       {{ aiModel.label }}
