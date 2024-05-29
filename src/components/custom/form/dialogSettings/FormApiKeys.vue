@@ -16,7 +16,9 @@ import {
 } from '@/components/ui/command';
 
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { toRawDeep } from '@/utils/utils';
+import { updateApiKeysService } from '@/services/apiKeysService';
 
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
 
@@ -31,6 +33,7 @@ const { handleSubmit, setFieldValue, setValues, values } = useForm({
 });
 
 const { toast } = useToast();
+const router = useRouter();
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -107,10 +110,10 @@ const removeApiKey = (id: number) => {
   setValues(rawValues);
 };
 
-const onSubmit = handleSubmit((values) => {
-  const validApiKeys = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.aiModel);
+const onSubmit = handleSubmit(async (values) => {
+  const filteredValues = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.aiModel);
 
-  console.log(validApiKeys);
+  await updateApiKeysService({ apiKeys: filteredValues }, router);
 });
 </script>
 

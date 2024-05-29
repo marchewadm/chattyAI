@@ -5,6 +5,7 @@ import loginSchema from '@/components/custom/form/auth/schemas/loginSchema';
 import resetPasswordSchema from '@/components/custom/form/auth/schemas/resetPasswordSchema';
 import profileAccountSchema from '@/components/custom/form/dialogSettings/schemas/profileAccountSchema';
 import profilePasswordSchema from '@/components/custom/form/dialogSettings/schemas/profilePasswordSchema';
+import apiKeysSchema from '@/components/custom/form/dialogSettings/schemas/apiKeysSchema';
 
 // Authentication service
 export type RegisterData = z.infer<typeof registerSchema>;
@@ -16,3 +17,6 @@ const partialProfileAccountSchema = profileAccountSchema.partial();
 
 export type PartialProfileAccountData = z.infer<typeof partialProfileAccountSchema>;
 export type ProfilePasswordData = z.infer<typeof profilePasswordSchema>;
+
+// Api Keys service
+export type ApiKeysData = z.infer<typeof apiKeysSchema>;
