@@ -15,7 +15,7 @@ import {
   CommandList
 } from '@/components/ui/command';
 
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import { toRawDeep } from '@/utils/utils';
 import { updateApiKeysService } from '@/services/apiKeysService';
@@ -38,6 +38,7 @@ const router = useRouter();
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 const isDesktop = useMediaQuery('(min-width: 768px)');
 
+// TODO: Fetch AI models from the backend
 const aiModels = ref<AiModel[]>([
   {
     value: 'gpt-3.5',
@@ -46,14 +47,41 @@ const aiModels = ref<AiModel[]>([
   }
 ]);
 
-const apiKeys = ref<ApiKey[]>([
-  {
-    id: 0,
-    key: undefined,
-    aiModel: null,
-    isOpen: false
-  }
-]);
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
+const userStore = useUserStore();
+const { apiKeysUserStore } = storeToRefs(userStore);
+
+const apiKeys = ref<ApiKey[]>([]);
+
+if (apiKeysUserStore.value) {
+  const rawValues = toRaw(apiKeysUserStore.value);
+
+  rawValues.forEach((apiKey: any) => {
+    aiModels.value.push({
+      value: apiKey.ai_model,
+      label: apiKey.ai_model,
+      isDisabled: true
+    });
+
+    apiKeys.value.push({
+      id: apiKeys.value.length,
+      key: apiKey.key,
+      aiModel: {
+        value: apiKey.ai_model,
+        label: apiKey.ai_model,
+        isDisabled: true
+      },
+      isOpen: false
+    });
+  });
+}
+apiKeys.value.push({
+  id: apiKeys.value.length,
+  key: undefined,
+  aiModel: null,
+  isOpen: false
+});
 
 const onAiModelSelect = (aiModel: AiModel, id: number) => {
   if (aiModel.isDisabled) return;

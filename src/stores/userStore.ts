@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
   const email = ref<string | null>(null);
   const avatar = ref<string | null>(null);
   const accessToken = useStorage<string | null>('accessToken', null);
+  const apiKeysUserStore = ref<any>(null);
 
   function $reset() {
     name.value = null;
@@ -26,6 +27,10 @@ export const useUserStore = defineStore('user', () => {
     avatar.value = userProfileData.avatar;
   }
 
+  function setUserApiKeysData(userApiKeysData: any) {
+    apiKeysUserStore.value = userApiKeysData;
+  }
+
   function updateUserProfileData(partialProfileAccountData: { name?: string }) {
     // Email won't be updated immediately due to the verification process.
     if (partialProfileAccountData.name) name.value = partialProfileAccountData.name;
@@ -36,9 +41,11 @@ export const useUserStore = defineStore('user', () => {
     email,
     avatar,
     accessToken,
+    apiKeysUserStore,
     $reset,
     setAccessToken,
     setUserProfileData,
+    setUserApiKeysData,
     updateUserProfileData
   };
 });

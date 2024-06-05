@@ -8,6 +8,22 @@ import type { ApiKeysData } from '@/types/zodInferredTypes';
 // Set the prefix URL for the api keys routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/api-keys`;
 
+export async function getApiKeysService(router: Router) {
+  const userStore = useUserStore();
+  const { accessToken } = storeToRefs(userStore);
+  const { setUserApiKeysData } = userStore;
+
+  try {
+    const response = await axios.get(`${prefixURL}/`, {
+      headers: { Authorization: `Bearer ${accessToken.value}` }
+    });
+
+    setUserApiKeysData(response.data);
+  } catch (err) {
+    handleAxiosError(err, router);
+  }
+}
+
 export async function updateApiKeysService(apiKeysData: ApiKeysData, router: Router) {
   const userStore = useUserStore();
   const { accessToken } = storeToRefs(userStore);
