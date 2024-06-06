@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 import { ref } from 'vue';
 import type { UserProfileData } from '@/types/user';
-import type { PartialProfileAccountData } from '@/types/zodInferredTypes';
 
 export const useUserStore = defineStore('user', () => {
   const name = ref<string | null>(null);
@@ -27,7 +26,7 @@ export const useUserStore = defineStore('user', () => {
     avatar.value = userProfileData.avatar;
   }
 
-  function updateUserProfileData(partialProfileAccountData: PartialProfileAccountData) {
+  function updateUserProfileData(partialProfileAccountData: { name?: string }) {
     // Email won't be updated immediately due to the verification process.
     if (partialProfileAccountData.name) name.value = partialProfileAccountData.name;
   }

@@ -5,6 +5,10 @@ import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
 import DialogSettings from '@/components/custom/dialog/DialogSettings/DialogSettings.vue';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { logoutUserService } from '@/services/authenticationService';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 </script>
 
 <template>
@@ -29,7 +33,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
       </Avatar>
       <DialogSettings />
       <ButtonColorMode />
-      <ButtonIcon iconName="power-outline" />
+      <ButtonIcon iconName="power-outline" @click="logoutUserService(router)" />
     </div>
     <button
       class="py-6 pl-2 pr-6 cursor-pointer absolute left-full top-1/2 -translate-y-1/2 toggle-navbar"

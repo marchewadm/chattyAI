@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { useToast } from '@/components/ui/toast';
 import { useUserStore } from '@/stores/userStore';
+import { handleAxiosError } from '@/utils/utils';
 import type { RegisterData, LoginData } from '@/types/zodInferredTypes';
 import type { Router } from 'vue-router';
 
 // Set the prefix URL for the authentication routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/authentication`;
+
 const { toast } = useToast();
 
 export async function createUserService(registerData: RegisterData) {
@@ -34,6 +36,7 @@ export async function createUserService(registerData: RegisterData) {
 export async function loginUserService(loginData: LoginData, router: Router) {
   try {
     const url = `${prefixURL}/token`;
+    const { setAccessToken } = useUserStore();
 
     // Create a new FormData object due to the way the backend expects that data (OAuth2PasswordRequestForm in FastAPI).
     const formData = new FormData();
@@ -45,7 +48,6 @@ export async function loginUserService(loginData: LoginData, router: Router) {
 
     if (response?.status === 200) {
       // If the response is OK, set the received token in the user store.
-      const { setAccessToken } = useUserStore();
       setAccessToken(response.data.access_token);
 
       // Redirect the user to the chat view.
@@ -58,10 +60,17 @@ export async function loginUserService(loginData: LoginData, router: Router) {
       });
     }
   } catch (err) {
-    toast({
-      title: 'Error',
-      description: 'Your email or password is incorrect. Please try again.',
-      variant: 'destructive'
-    });
+    handleAxiosError(err, router);
   }
+}
+
+export function logoutUserService(router: Router) {
+  const { $reset } = useUserStore();
+
+  $reset();
+  router.push({ name: 'Home' });
+  toast({
+    title: 'Success',
+    description: 'You have successfully logged out.'
+  });
 }

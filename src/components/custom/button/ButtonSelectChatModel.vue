@@ -13,19 +13,20 @@ import { useChatStore } from '@/stores/chatStore';
 import { storeToRefs } from 'pinia';
 
 const chatStore = useChatStore();
-const { aiModel } = storeToRefs(chatStore);
+const { aiModel, aiModels } = storeToRefs(chatStore);
 </script>
 
 <template>
-  <Select defaultValue="gpt-3.5-turbo" v-model="aiModel">
+  <Select v-model="aiModel">
     <SelectTrigger class="dark:border-gray-700">
-      <SelectValue placeholder="Select a model" class="pr-2" />
+      <SelectValue placeholder="Select model" class="pr-2" />
     </SelectTrigger>
     <SelectContent class="dark:bg-gray-900 dark:border-gray-700">
       <SelectGroup>
         <SelectLabel>Available models</SelectLabel>
-        <SelectItem value="GPT-4">GPT-4</SelectItem>
-        <SelectItem value="GPT-3.5">GPT-3.5</SelectItem>
+        <SelectItem v-for="(aiModel, index) in aiModels" :value="aiModel.value" :key="index">
+          {{ aiModel.label }}
+        </SelectItem>
       </SelectGroup>
     </SelectContent>
   </Select>

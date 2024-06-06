@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
+import { useChatStore } from '@/stores/chatStore';
 import { useColorMode } from '@vueuse/core';
 import { useToast } from '@/components/ui/toast';
 import { Separator } from '@/components/ui/separator';
@@ -15,6 +17,9 @@ import {
 
 const { toast } = useToast();
 const { store } = useColorMode();
+
+const chatStore = useChatStore();
+const { aiModels } = storeToRefs(chatStore);
 
 const handleToast = () => {
   toast({
@@ -45,15 +50,16 @@ const handleToast = () => {
     <Separator />
     <div class="flex items-center">
       <p class="text-sm">Default LLM</p>
-      <Select defaultValue="GPT-3.5">
+      <Select>
         <SelectTrigger class="w-24 ml-auto">
-          <SelectValue placeholder="Select a model" />
+          <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Available models</SelectLabel>
-            <SelectItem value="GPT-4">GPT-4</SelectItem>
-            <SelectItem value="GPT-3.5">GPT-3.5</SelectItem>
+            <SelectItem v-for="(aiModel, index) in aiModels" :value="aiModel.value" :key="index">
+              {{ aiModel.label }}
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -1,3 +1,4 @@
+import { toRaw } from 'vue';
 import { useColorMode } from '@vueuse/core';
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
@@ -23,7 +24,7 @@ export const handleAuthFormTypeChange = (newAuthFormType: AuthFormType) => {
   authFormType.value = newAuthFormType;
 };
 
-export const handleAxiosError = (err: unknown, router: Router) => {
+export const handleAxiosError = (err: unknown, router?: Router) => {
   if (err instanceof AxiosError) {
     const userStore = useUserStore();
     const { $reset } = userStore;
@@ -38,9 +39,27 @@ export const handleAxiosError = (err: unknown, router: Router) => {
     if (err.response?.status === 401) {
       // If the user is not authenticated, reset the user store and redirect them to the Home route.
       $reset();
-      router.push({ name: 'Home' });
+      router?.push({ name: 'Home' });
     }
   } else {
     console.error(err);
   }
+};
+
+export const toRawDeep = <T>(observed: T): T => {
+  const val = toRaw(observed);
+
+  if (Array.isArray(val)) {
+    return val.map(toRawDeep) as T;
+  }
+
+  if (val === null) return null as T;
+
+  if (typeof val === 'object') {
+    const entries = Object.entries(val).map(([key, val]) => [key, toRawDeep(val)]);
+
+    return Object.fromEntries(entries);
+  }
+
+  return val;
 };
