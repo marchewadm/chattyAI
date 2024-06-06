@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import type { AiModel, AiModelsData, ApiKey, ApiKeyData } from '@/types/apiKey';
 
 export const useChatStore = defineStore('chat', () => {
-  const aiModel = ref<string>('GPT-3.5'); // TODO: use localstorage to save default LLM
+  const aiModel = ref<string>(); // TODO: use localstorage to save default LLM preference
   const aiModels = ref<AiModel[]>([]);
   const apiKeys = ref<ApiKey[]>([]);
 
