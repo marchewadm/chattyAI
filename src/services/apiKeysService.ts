@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import { useChatStore } from '@/stores/chatStore';
 import { storeToRefs } from 'pinia';
 import { handleAxiosError } from '@/utils/utils';
 import type { Router } from 'vue-router';
 import type { ApiKeysData } from '@/types/zodInferredTypes';
+import type { ApiKeyData } from '@/types/apiKey';
 
 // Set the prefix URL for the api keys routes, just to make the code look cleaner.
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/api-keys`;
@@ -11,10 +13,10 @@ const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/api-keys`;
 export async function getApiKeysService(router: Router) {
   const userStore = useUserStore();
   const { accessToken } = storeToRefs(userStore);
-  const { setUserApiKeysData } = userStore;
+  const { setUserApiKeysData } = useChatStore();
 
   try {
-    const response = await axios.get(`${prefixURL}/`, {
+    const response = await axios.get<ApiKeyData[]>(`${prefixURL}/`, {
       headers: { Authorization: `Bearer ${accessToken.value}` }
     });
 

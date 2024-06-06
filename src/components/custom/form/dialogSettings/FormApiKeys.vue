@@ -2,7 +2,6 @@
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/toast';
 import { FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -15,133 +14,48 @@ import {
   CommandList
 } from '@/components/ui/command';
 
-import { ref, toRaw } from 'vue';
+import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import { toRawDeep } from '@/utils/utils';
-import { updateApiKeysService } from '@/services/apiKeysService';
 
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
+
+import { updateApiKeysService } from '@/services/apiKeysService';
 
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import apiKeysSchema from './schemas/apiKeysSchema';
-import type { AiModel, ApiKey } from '@/types/apiKey';
+
+import { useChatStore } from '@/stores/chatStore';
+import { storeToRefs } from 'pinia';
+
+import {
+  setApiKeyFormFields,
+  onAiModelSelect,
+  addApiKey,
+  removeApiKey
+} from './helpers/formApiKeysHelper';
+
+const router = useRouter();
+
+const chatStore = useChatStore();
+const { aiModels, apiKeys } = storeToRefs(chatStore);
+
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
+const isDesktop = useMediaQuery('(min-width: 768px)');
 
 const formSchema = toTypedSchema(apiKeysSchema);
 const { handleSubmit, setFieldValue, setValues, values } = useForm({
   validationSchema: formSchema
 });
 
-const { toast } = useToast();
-const router = useRouter();
-
-const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
-const isDesktop = useMediaQuery('(min-width: 768px)');
-
-// TODO: Fetch AI models from the backend
-const aiModels = ref<AiModel[]>([
-  {
-    value: 'gpt-3.5',
-    label: 'GPT-3.5',
-    isDisabled: false
-  }
-]);
-
-import { useUserStore } from '@/stores/userStore';
-import { storeToRefs } from 'pinia';
-const userStore = useUserStore();
-const { apiKeysUserStore } = storeToRefs(userStore);
-
-const apiKeys = ref<ApiKey[]>([]);
-
-if (apiKeysUserStore.value) {
-  const rawValues = toRaw(apiKeysUserStore.value);
-
-  rawValues.forEach((apiKey: any) => {
-    aiModels.value.push({
-      value: apiKey.ai_model,
-      label: apiKey.ai_model,
-      isDisabled: true
-    });
-
-    apiKeys.value.push({
-      id: apiKeys.value.length,
-      key: apiKey.key,
-      aiModel: {
-        value: apiKey.ai_model,
-        label: apiKey.ai_model,
-        isDisabled: true
-      },
-      isOpen: false
-    });
-  });
-}
-apiKeys.value.push({
-  id: apiKeys.value.length,
-  key: undefined,
-  aiModel: null,
-  isOpen: false
-});
-
-const onAiModelSelect = (aiModel: AiModel, id: number) => {
-  if (aiModel.isDisabled) return;
-
-  const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
-  if (!(index !== -1)) return;
-
-  apiKeys.value[index].aiModel = aiModel;
-  apiKeys.value[index].isOpen = false;
-
-  // Disable the selected AI model, so it can't be selected again if the key is in use
-  aiModel.isDisabled = true;
-};
-
-const addApiKey = (apiKey: ApiKey) => {
-  if (apiKey.key && apiKey.aiModel) {
-    // If new API key was successfully added, create a new empty input field
-    setFieldValue(`apiKeys.${apiKey.id}`, {
-      key: apiKey.key,
-      aiModel: apiKey.aiModel.value
-    });
-
-    apiKeys.value.push({
-      id: apiKeys.value.length,
-      key: undefined,
-      aiModel: null,
-      isOpen: false
-    });
-  } else {
-    toast({
-      title: 'Error',
-      description: 'Please provide a valid API key first',
-      variant: 'destructive'
-    });
-  }
-};
-
-const removeApiKey = (id: number) => {
-  const index = apiKeys.value.findIndex((apiKey) => apiKey.id === id);
-
-  if (index === -1) return;
-
-  const indexAiModel = aiModels.value.findIndex(
-    (aiModel) => aiModel.value === apiKeys.value[index].aiModel?.value
-  );
-
-  aiModels.value[indexAiModel].isDisabled = false;
-
-  apiKeys.value.splice(index, 1);
-
-  const rawValues = structuredClone(toRawDeep(values));
-  rawValues.apiKeys?.splice(index, 1);
-
-  setValues(rawValues);
-};
-
 const onSubmit = handleSubmit(async (values) => {
   const filteredValues = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.aiModel);
 
   await updateApiKeysService({ apiKeys: filteredValues }, router);
+});
+
+onBeforeMount(async () => {
+  await setApiKeyFormFields(setFieldValue);
 });
 </script>
 
@@ -219,7 +133,7 @@ const onSubmit = handleSubmit(async (values) => {
           class="w-8 h-8"
           size="icon"
           v-show="apiKey === apiKeys[apiKeys.length - 1]"
-          @click="addApiKey(apiKey)"
+          @click="addApiKey(apiKey, setFieldValue)"
         />
         <ButtonIcon
           type="button"
@@ -228,7 +142,7 @@ const onSubmit = handleSubmit(async (values) => {
           size="icon"
           variant="destructive"
           v-show="apiKey !== apiKeys[apiKeys.length - 1]"
-          @click="removeApiKey(apiKey.id)"
+          @click="removeApiKey(apiKey.id, setValues, values)"
         />
       </div>
     </div>

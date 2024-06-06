@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import { getUserProfileService } from '@/services/userService';
+import { getAiModelsService } from '@/services/aiModelsService';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,7 @@ const router = createRouter({
       component: () => import('@/views/ChatView.vue'),
       beforeEnter: async () => {
         await getUserProfileService(router);
+        await getAiModelsService(router);
       }
     }
   ]

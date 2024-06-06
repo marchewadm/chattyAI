@@ -7,6 +7,13 @@ export type AiModel = {
 export type ApiKey = {
   id: number;
   key: string | undefined;
-  aiModel: AiModel | null;
+  aiModel: AiModel | undefined;
   isOpen: boolean;
+};
+
+export type AiModelsData = Record<string, AiModel>;
+
+export type ApiKeyData = {
+  key: string;
+  aiModel: string;
 };
