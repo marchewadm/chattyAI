@@ -14,7 +14,7 @@ import { storeToRefs } from 'pinia';
 import { useChatStore } from '@/stores/chatStore';
 
 const chatStore = useChatStore();
-const { aiModel } = storeToRefs(chatStore);
+const { apiProvider } = storeToRefs(chatStore);
 
 const target = ref<HTMLElement>();
 const target2 = ref<HTMLElement>();
@@ -88,7 +88,7 @@ onMounted(() => {
             </h1>
             <div class="relative">
               <Textarea
-                :placeholder="`Message with ${aiModel}`"
+                :placeholder="`Message with ${apiProvider}`"
                 class="resize-none h-10 p-4 dark:border-gray-700 rounded-2xl"
               />
               <div class="flex absolute left-full top-1/2 -translate-y-1/2">

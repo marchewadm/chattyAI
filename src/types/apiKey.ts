@@ -1,4 +1,4 @@
-export type AiModel = {
+export type ApiProvider = {
   value: string;
   label: string;
   isDisabled: boolean;
@@ -7,13 +7,13 @@ export type AiModel = {
 export type ApiKey = {
   id: number;
   key: string | undefined;
-  aiModel: AiModel | undefined;
+  apiProvider: ApiProvider | undefined;
   isOpen: boolean;
 };
 
-export type AiModelsData = Record<string, AiModel>;
+export type ApiProvidersData = Record<string, ApiProvider>;
 
 export type ApiKeyData = {
   key: string;
-  aiModel: string;
+  apiProvider: string;
 };

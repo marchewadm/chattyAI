@@ -19,7 +19,7 @@ const { toast } = useToast();
 const { store } = useColorMode();
 
 const chatStore = useChatStore();
-const { aiModels } = storeToRefs(chatStore);
+const { apiProviders } = storeToRefs(chatStore);
 
 const handleToast = () => {
   toast({
@@ -57,8 +57,12 @@ const handleToast = () => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Available models</SelectLabel>
-            <SelectItem v-for="(aiModel, index) in aiModels" :value="aiModel.value" :key="index">
-              {{ aiModel.label }}
+            <SelectItem
+              v-for="(apiProvider, index) in apiProviders"
+              :value="apiProvider.value"
+              :key="index"
+            >
+              {{ apiProvider.label }}
             </SelectItem>
           </SelectGroup>
         </SelectContent>

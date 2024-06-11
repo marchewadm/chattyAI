@@ -5,12 +5,12 @@ export default z.object({
     .array(
       z.object({
         key: z.string().min(1).optional(),
-        aiModel: z.string().optional()
+        apiProvider: z.string().optional()
       })
     )
     .refine((apiKeys) => {
       return apiKeys.every((apiKey) => {
-        return !apiKey.key || (apiKey.key && apiKey.aiModel);
+        return !apiKey.key || (apiKey.key && apiKey.apiProvider);
       });
     })
 });

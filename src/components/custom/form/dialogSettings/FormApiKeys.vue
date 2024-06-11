@@ -30,7 +30,7 @@ import { storeToRefs } from 'pinia';
 
 import {
   setApiKeyFormFields,
-  onAiModelSelect,
+  onApiProviderSelect,
   addApiKey,
   removeApiKey
 } from './helpers/formApiKeysHelper';
@@ -38,7 +38,7 @@ import {
 const router = useRouter();
 
 const chatStore = useChatStore();
-const { aiModels, apiKeys } = storeToRefs(chatStore);
+const { apiProviders, apiKeys } = storeToRefs(chatStore);
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -49,7 +49,7 @@ const { handleSubmit, setFieldValue, setValues, values } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  const filteredValues = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.aiModel);
+  const filteredValues = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.apiProvider);
 
   await updateApiKeysService({ apiKeys: filteredValues }, router);
 });
@@ -82,26 +82,26 @@ onBeforeMount(async () => {
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup>
                   <CommandItem
-                    v-for="aiModel in aiModels"
-                    :key="aiModel.value"
-                    :value="aiModel.value"
-                    :disabled="aiModel.isDisabled"
-                    @select="onAiModelSelect(aiModel, apiKey.id)"
+                    v-for="apiProvider in apiProviders"
+                    :key="apiProvider.value"
+                    :value="apiProvider.value"
+                    :disabled="apiProvider.isDisabled"
+                    @select="onApiProviderSelect(apiProvider, apiKey.id)"
                   >
-                    {{ aiModel.label }}
+                    {{ apiProvider.label }}
                   </CommandItem>
                 </CommandGroup>
               </CommandList>
             </Command>
           </DefineTemplate>
 
-          <FormField name="aiModel">
+          <FormField name="apiProvider">
             <FormItem>
               <Popover v-if="isDesktop" v-model:open="apiKey.isOpen">
                 <PopoverTrigger as-child>
                   <FormControl>
                     <Button variant="outline" class="w-[150px] justify-start">
-                      {{ apiKey.aiModel ? apiKey.aiModel.label : '+ Select model' }}
+                      {{ apiKey.apiProvider ? apiKey.apiProvider.label : '+ Select model' }}
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -114,7 +114,7 @@ onBeforeMount(async () => {
                 <DrawerTrigger as-child>
                   <FormControl>
                     <Button variant="outline" class="w-[150px] justify-start">
-                      {{ apiKey.aiModel ? apiKey.aiModel.label : '+ Select model' }}
+                      {{ apiKey.apiProvider ? apiKey.apiProvider.label : '+ Select model' }}
                     </Button>
                   </FormControl>
                 </DrawerTrigger>

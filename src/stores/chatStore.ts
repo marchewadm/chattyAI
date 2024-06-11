@@ -1,15 +1,15 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { AiModel, AiModelsData, ApiKey, ApiKeyData } from '@/types/apiKey';
+import type { ApiProvider, ApiProvidersData, ApiKey, ApiKeyData } from '@/types/apiKey';
 
 export const useChatStore = defineStore('chat', () => {
-  const aiModel = ref<string>(); // TODO: use localstorage to save default LLM preference
-  const aiModels = ref<AiModel[]>([]);
+  const apiProvider = ref<string>(); // TODO: use localstorage to save default LLM preference
+  const apiProviders = ref<ApiProvider[]>([]);
   const apiKeys = ref<ApiKey[]>([]);
 
-  function setAiModelsData(aiModelsData: AiModelsData) {
-    for (const key of Object.keys(aiModelsData)) {
-      aiModels.value.push(aiModelsData[key]);
+  function setApiProvidersData(apiProvidersData: ApiProvidersData) {
+    for (const key of Object.keys(apiProvidersData)) {
+      apiProviders.value.push(apiProvidersData[key]);
     }
   }
 
@@ -19,7 +19,9 @@ export const useChatStore = defineStore('chat', () => {
         apiKeys.value.push({
           id: apiKeys.value.length,
           key: apiKey.key,
-          aiModel: aiModels.value.find((aiModel) => aiModel.value === apiKey.aiModel),
+          apiProvider: apiProviders.value.find(
+            (apiProvider) => apiProvider.value === apiKey.apiProvider
+          ),
           isOpen: false
         });
       });
@@ -28,7 +30,7 @@ export const useChatStore = defineStore('chat', () => {
     apiKeys.value.push({
       id: apiKeys.value.length,
       key: undefined,
-      aiModel: undefined,
+      apiProvider: undefined,
       isOpen: false
     });
   }
@@ -37,5 +39,12 @@ export const useChatStore = defineStore('chat', () => {
     apiKeys.value = [];
   }
 
-  return { aiModel, aiModels, apiKeys, setAiModelsData, setUserApiKeysData, resetUserApiKeysData };
+  return {
+    apiProvider,
+    apiProviders,
+    apiKeys,
+    setApiProvidersData,
+    setUserApiKeysData,
+    resetUserApiKeysData
+  };
 });
