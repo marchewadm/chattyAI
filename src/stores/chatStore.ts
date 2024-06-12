@@ -22,7 +22,8 @@ export const useChatStore = defineStore('chat', () => {
           apiProvider: apiProviders.value.find(
             (apiProvider) => apiProvider.value === apiKey.apiProvider
           ),
-          isOpen: false
+          isOpen: false,
+          isRevealed: false
         });
       });
     }
@@ -31,7 +32,8 @@ export const useChatStore = defineStore('chat', () => {
       id: apiKeys.value.length,
       key: undefined,
       apiProvider: undefined,
-      isOpen: false
+      isOpen: false,
+      isRevealed: false
     });
   }
 

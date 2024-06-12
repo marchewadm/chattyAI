@@ -32,7 +32,8 @@ import {
   setApiKeyFormFields,
   onApiProviderSelect,
   addApiKey,
-  removeApiKey
+  removeApiKey,
+  toggleRevealApiKey
 } from './helpers/formApiKeysHelper';
 
 const router = useRouter();
@@ -70,7 +71,22 @@ onBeforeMount(async () => {
         <FormField :name="`apiKeys.${index}.apiKey`">
           <FormItem>
             <FormControl>
-              <Input type="text" placeholder="Your API Key" v-model="apiKey.key" />
+              <div class="relative flex items-center justify-end">
+                <Input
+                  :type="apiKey.isRevealed ? 'text' : 'password'"
+                  placeholder="Your API Key"
+                  v-model="apiKey.key"
+                  class="pr-10"
+                />
+                <div class="absolute">
+                  <ButtonIcon
+                    type="button"
+                    :iconName="apiKey.isRevealed ? 'eye-off-outline' : 'eye-outline'"
+                    variant="ghost"
+                    @click="toggleRevealApiKey(apiKey)"
+                  />
+                </div>
+              </div>
             </FormControl>
           </FormItem>
         </FormField>

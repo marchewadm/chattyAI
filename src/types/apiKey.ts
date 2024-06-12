@@ -9,6 +9,7 @@ export type ApiKey = {
   key: string | undefined;
   apiProvider: ApiProvider | undefined;
   isOpen: boolean;
+  isRevealed: boolean;
 };
 
 export type ApiProvidersData = Record<string, ApiProvider>;

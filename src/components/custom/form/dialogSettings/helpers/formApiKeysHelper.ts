@@ -48,7 +48,8 @@ export function addApiKey(apiKey: ApiKey, setFieldValue: Function) {
       id: apiKeys.value.length,
       key: undefined,
       apiProvider: undefined,
-      isOpen: false
+      isOpen: false,
+      isRevealed: false
     });
   } else {
     toast({
@@ -78,4 +79,14 @@ export function removeApiKey(id: number, setValues: Function, values: any) {
   rawValues.apiKeys?.splice(index, 1);
 
   setValues(rawValues);
+}
+
+export function toggleRevealApiKey(apiKey: ApiKey) {
+  if (!apiKey.key) return;
+
+  if (!apiKey.isRevealed) {
+    apiKey.isRevealed = true;
+  } else {
+    apiKey.isRevealed = false;
+  }
 }
