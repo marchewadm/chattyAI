@@ -32,7 +32,7 @@ export const handleAxiosError = (err: unknown, router?: Router) => {
 
     toast({
       title: 'Error',
-      description: err.response?.data.message,
+      description: err.response?.data.detail,
       variant: 'destructive'
     });
 

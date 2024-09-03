@@ -5,12 +5,13 @@ export default z.object({
     .array(
       z.object({
         key: z.string().min(1).optional(),
-        apiProvider: z.string().optional()
+        apiProviderId: z.number().optional()
       })
     )
     .refine((apiKeys) => {
       return apiKeys.every((apiKey) => {
-        return !apiKey.key || (apiKey.key && apiKey.apiProvider);
+        return !apiKey.key || (apiKey.key && apiKey.apiProviderId);
       });
-    })
+    }),
+  passphrase: z.string().min(1)
 });

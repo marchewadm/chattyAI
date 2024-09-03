@@ -6,7 +6,7 @@ import type { RegisterData, LoginData } from '@/types/zodInferredTypes';
 import type { Router } from 'vue-router';
 
 // Set the prefix URL for the authentication routes, just to make the code look cleaner.
-const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/authentication`;
+const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/auth`;
 
 const { toast } = useToast();
 
@@ -35,7 +35,7 @@ export async function createUserService(registerData: RegisterData) {
 
 export async function loginUserService(loginData: LoginData, router: Router) {
   try {
-    const url = `${prefixURL}/token`;
+    const url = `${prefixURL}/login`;
     const { setAccessToken } = useUserStore();
 
     // Create a new FormData object due to the way the backend expects that data (OAuth2PasswordRequestForm in FastAPI).

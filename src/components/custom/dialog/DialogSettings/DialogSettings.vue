@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
+import DialogPassphrase from '../DialogPassphrase/DialogPassphrase.vue';
 import DialogSettingsGeneral from '@/components/custom/dialog/DialogSettings/components/DialogSettingsGeneral.vue';
 import DialogSettingsProfile from '@/components/custom/dialog/DialogSettings/components/DialogSettingsProfile.vue';
 import DialogSettingsApiKeys from '@/components/custom/dialog/DialogSettings/components/DialogSettingsApiKeys.vue';
@@ -16,13 +17,35 @@ import {
 
 import { ref } from 'vue';
 
-const activeTab = ref('general');
+import { storeToRefs } from 'pinia';
+import { useDialogStore } from '@/stores/dialogStore';
+
+import { useEventBus } from '@vueuse/core';
+
+const dialogStore = useDialogStore();
+const { displayPassphraseDialog } = storeToRefs(dialogStore);
+const { togglePassphraseDialog } = dialogStore;
+
+const activeTab = ref<'general' | 'profile' | 'apiKeys'>('general');
+
+const bus = useEventBus<string>('validatePassphraseOnGetApiKeys');
+
+bus.on(() => {
+  activeTab.value = 'apiKeys';
+  togglePassphraseDialog();
+});
+
+const hideApiKeysTab = (isDialogVisible: boolean) => {
+  if (!isDialogVisible && activeTab.value === 'apiKeys') {
+    activeTab.value = 'general';
+  }
+};
 
 // TODO: Add aria-label;
 </script>
 
 <template>
-  <Dialog>
+  <Dialog @update:open="hideApiKeysTab">
     <DialogTrigger as-child>
       <ButtonIcon iconName="settings-outline" />
     </DialogTrigger>
@@ -64,12 +87,15 @@ const activeTab = ref('general');
             size="sm"
             class="items-center gap-1 w-24 justify-start"
             :class="{ 'bg-secondary': activeTab === 'apiKeys' }"
-            @click="activeTab = 'apiKeys'"
+            @click="
+              activeTab !== 'apiKeys' ? (displayPassphraseDialog = true) : (activeTab = 'apiKeys')
+            "
           />
         </div>
         <DialogSettingsGeneral v-if="activeTab === 'general'" />
         <DialogSettingsProfile v-if="activeTab === 'profile'" />
         <DialogSettingsApiKeys v-if="activeTab === 'apiKeys'" />
+        <DialogPassphrase />
       </div>
     </DialogContent>
   </Dialog>

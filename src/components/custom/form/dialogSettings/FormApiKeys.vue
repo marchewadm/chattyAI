@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
-import { Button } from '@/components/ui/button';
+
 import { Input } from '@/components/ui/input';
-import { FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
@@ -13,11 +15,22 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
+import {
+  AlertDialog,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogFooter,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
 
-import { onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
+import { storeToRefs } from 'pinia';
+import { createReusableTemplate, useMediaQuery, useEventBus } from '@vueuse/core';
 
 import { updateApiKeysService } from '@/services/apiKeysService';
 
@@ -26,7 +39,6 @@ import { toTypedSchema } from '@vee-validate/zod';
 import apiKeysSchema from './schemas/apiKeysSchema';
 
 import { useChatStore } from '@/stores/chatStore';
-import { storeToRefs } from 'pinia';
 
 import {
   setApiKeyFormFields,
@@ -36,7 +48,10 @@ import {
   toggleRevealApiKey
 } from './helpers/formApiKeysHelper';
 
+const isPassphraseRequired = ref(false);
+
 const router = useRouter();
+const bus = useEventBus<string>('validatePassphraseOnUpdateApiKeys');
 
 const chatStore = useChatStore();
 const { apiProviders, apiKeys } = storeToRefs(chatStore);
@@ -50,9 +65,13 @@ const { handleSubmit, setFieldValue, setValues, values } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  const filteredValues = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.apiProvider);
+  const filteredValues = values.apiKeys.filter((apiKey) => apiKey.key && apiKey.apiProviderId);
 
-  await updateApiKeysService({ apiKeys: filteredValues }, router);
+  await updateApiKeysService({ apiKeys: filteredValues, passphrase: values.passphrase }, router);
+});
+
+bus.on(() => {
+  isPassphraseRequired.value = false;
 });
 
 onBeforeMount(async () => {
@@ -61,7 +80,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <form @submit="onSubmit">
+  <form>
     <div class="flex flex-col gap-2 mb-4 py-1 pl-1 pr-3">
       <div
         class="grid api-keys-layout gap-2 items-center"
@@ -163,7 +182,33 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div class="flex justify-end pr-3">
-      <Button>Save changes</Button>
+      <AlertDialog v-model:open="isPassphraseRequired">
+        <AlertDialogTrigger as-child>
+          <Button type="button">Save changes</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Passphrase required</AlertDialogTitle>
+            <AlertDialogDescription>
+              To protect your API keys, please enter your passphrase before proceeding. This ensures
+              that only authorized actions are performed on sensitive data.
+            </AlertDialogDescription>
+            <Separator />
+          </AlertDialogHeader>
+          <FormField v-slot="{ componentField }" name="passphrase">
+            <FormItem>
+              <FormLabel>Enter your passphrase</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="Your passphrase" v-bind="componentField" />
+              </FormControl>
+            </FormItem>
+          </FormField>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button @click="onSubmit">Continue</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   </form>
 </template>

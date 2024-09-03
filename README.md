@@ -38,7 +38,7 @@ VITE_BACKEND_URL=BACKEND_API_URL
 
 NOTE:
 
-- Remember to adjust `VITE_BACKEND_URL` according to where the backend API is running. If it is running locally, your URL should look like this: `VITE_BACKEND_URL=http://localhost:8000`.
+- Remember to adjust `VITE_BACKEND_URL` according to where the backend API is running. If it is running locally, your URL should look like this: `VITE_BACKEND_URL=http://localhost:8000/api`.
 
 ## Usage
 

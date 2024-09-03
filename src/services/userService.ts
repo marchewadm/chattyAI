@@ -18,7 +18,7 @@ export async function getUserProfileService(router: Router) {
   const { accessToken } = storeToRefs(userStore);
 
   try {
-    const url = `${prefixURL}/profile`;
+    const url = `${prefixURL}`;
 
     const response = await axios.get<UserProfileData>(url, {
       headers: { Authorization: `Bearer ${accessToken.value}` }
@@ -81,6 +81,23 @@ export async function updateUserPasswordService(
       title: 'Success',
       description: response.data.message
     });
+  } catch (err) {
+    handleAxiosError(err, router);
+  }
+}
+
+export async function updateUserPassphraseService(router: Router) {
+  const userStore = useUserStore();
+  const { accessToken } = storeToRefs(userStore);
+
+  try {
+    const url = `${prefixURL}/update-passphrase`;
+
+    const response = await axios.patch<{ passphrase: string }>(url, null, {
+      headers: { Authorization: `Bearer ${accessToken.value}` }
+    });
+
+    return response.data.passphrase;
   } catch (err) {
     handleAxiosError(err, router);
   }

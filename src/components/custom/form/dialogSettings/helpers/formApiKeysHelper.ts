@@ -11,7 +11,7 @@ export async function setApiKeyFormFields(setFieldValue: Function) {
   apiKeys.value.forEach((apiKey) => {
     setFieldValue(`apiKeys.${apiKey.id}`, {
       key: apiKey.key,
-      apiProvider: apiKey.apiProvider?.value
+      apiProviderId: apiKey.apiProvider?.apiProviderId
     });
   });
 }
@@ -41,7 +41,7 @@ export function addApiKey(apiKey: ApiKey, setFieldValue: Function) {
     // If new API key was successfully added, create a new empty input field
     setFieldValue(`apiKeys.${apiKey.id}`, {
       key: apiKey.key,
-      apiProvider: apiKey.apiProvider.value
+      apiProviderId: apiKey.apiProvider.apiProviderId
     });
 
     apiKeys.value.push({

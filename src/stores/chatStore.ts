@@ -7,27 +7,42 @@ export const useChatStore = defineStore('chat', () => {
   const apiProviders = ref<ApiProvider[]>([]);
   const apiKeys = ref<ApiKey[]>([]);
 
-  function setApiProvidersData(apiProvidersData: ApiProvidersData) {
-    for (const key of Object.keys(apiProvidersData)) {
-      apiProviders.value.push(apiProvidersData[key]);
-    }
+  function setApiProvidersData(apiProvidersData: ApiProvidersData[]) {
+    apiProvidersData.forEach((apiProvider) => {
+      apiProviders.value.push({
+        value: apiProvider.name.toLowerCase(),
+        label: apiProvider.name,
+        isDisabled: false,
+        apiProviderId: apiProvider.id
+      });
+    });
   }
 
   function setUserApiKeysData(userApiKeysData: ApiKeyData[]) {
     if (userApiKeysData) {
       userApiKeysData.forEach((apiKey) => {
+        const apiProvider = apiProviders.value.find(
+          (apiProvider) => apiProvider.value === apiKey.apiProviderLowercaseName
+        );
+
+        if (!apiProvider) {
+          return;
+        }
+
+        // Disable the api provider if the user has already added an api key for it to prevent duplicates
+        apiProvider.isDisabled = true;
+
         apiKeys.value.push({
           id: apiKeys.value.length,
           key: apiKey.key,
-          apiProvider: apiProviders.value.find(
-            (apiProvider) => apiProvider.value === apiKey.apiProvider
-          ),
+          apiProvider,
           isOpen: false,
           isRevealed: false
         });
       });
     }
 
+    // Add an empty api key object to the array
     apiKeys.value.push({
       id: apiKeys.value.length,
       key: undefined,

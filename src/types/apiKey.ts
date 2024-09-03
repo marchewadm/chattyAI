@@ -2,6 +2,7 @@ export type ApiProvider = {
   value: string;
   label: string;
   isDisabled: boolean;
+  apiProviderId: number;
 };
 
 export type ApiKey = {
@@ -12,9 +13,15 @@ export type ApiKey = {
   isRevealed: boolean;
 };
 
-export type ApiProvidersData = Record<string, ApiProvider>;
+export type ApiProvidersData = {
+  id: number;
+  name: string;
+};
 
 export type ApiKeyData = {
+  id: number;
   key: string;
-  apiProvider: string;
+  apiProviderId: number;
+  apiProviderName: string;
+  apiProviderLowercaseName: string;
 };

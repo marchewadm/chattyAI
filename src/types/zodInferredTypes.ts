@@ -6,6 +6,7 @@ import resetPasswordSchema from '@/components/custom/form/auth/schemas/resetPass
 import profileAccountSchema from '@/components/custom/form/dialogSettings/schemas/profileAccountSchema';
 import profilePasswordSchema from '@/components/custom/form/dialogSettings/schemas/profilePasswordSchema';
 import apiKeysSchema from '@/components/custom/form/dialogSettings/schemas/apiKeysSchema';
+import passphraseSchema from '@/components/custom/form/dialogPassphrase/schemas/passphraseSchema';
 
 // Authentication service
 export type RegisterData = z.infer<typeof registerSchema>;
@@ -20,3 +21,4 @@ export type ProfilePasswordData = z.infer<typeof profilePasswordSchema>;
 
 // Api Keys service
 export type ApiKeysData = z.infer<typeof apiKeysSchema>;
+export type PassphraseData = z.infer<typeof passphraseSchema>;
