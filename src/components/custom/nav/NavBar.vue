@@ -5,10 +5,14 @@ import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
 import DialogSettings from '@/components/custom/dialog/DialogSettings/DialogSettings.vue';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { storeToRefs } from 'pinia';
+import { useChatRoomStore } from '@/stores/chatRoomStore';
 import { logoutUserService } from '@/services/authenticationService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const chatRoomStore = useChatRoomStore();
+const { chatRooms } = storeToRefs(chatRoomStore);
 </script>
 
 <template>
@@ -23,8 +27,11 @@ const router = useRouter();
       />
     </div>
     <div class="chats flex flex-col gap-2 overflow-y-scroll">
-      <ButtonOpenChat chatTitle="Lorem ipsum dolor sit amet consectetur." />
-      <ButtonOpenChat chatTitle="Asperiores rerum commodi, provident et facere at!" />
+      <ButtonOpenChat
+        v-for="chat in chatRooms"
+        :key="chat.roomUuid"
+        :chatTitle="chat.lastMessage"
+      />
     </div>
     <div class="py-2 mt-auto flex items-center justify-between">
       <Avatar>
