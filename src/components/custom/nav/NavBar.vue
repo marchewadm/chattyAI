@@ -6,13 +6,32 @@ import DialogSettings from '@/components/custom/dialog/DialogSettings/DialogSett
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/userStore';
 import { useChatRoomStore } from '@/stores/chatRoomStore';
 import { logoutUserService } from '@/services/authenticationService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const userStore = useUserStore();
 const chatRoomStore = useChatRoomStore();
 const { chatRooms } = storeToRefs(chatRoomStore);
+const { name } = storeToRefs(userStore);
+
+const truncateName = () => {
+  if (name.value) {
+    const words = name.value.split(' ');
+
+    if (words.length > 1) {
+      return words[0][0] + words[1][0];
+    }
+    return words[0][0];
+  }
+};
+
+const startNewChat = () => {
+  router.push({ name: 'NewChat' });
+};
 </script>
 
 <template>
@@ -24,6 +43,7 @@ const { chatRooms } = storeToRefs(chatRoomStore);
         text="New chat"
         textClass="text-base tracking-tighter"
         class="w-full justify-between"
+        @click="startNewChat"
       />
     </div>
     <div class="chats flex flex-col gap-2 overflow-y-scroll">
@@ -31,12 +51,13 @@ const { chatRooms } = storeToRefs(chatRoomStore);
         v-for="chat in chatRooms"
         :key="chat.roomUuid"
         :chatTitle="chat.lastMessage"
+        :chatRoomUuid="chat.roomUuid"
       />
     </div>
     <div class="py-2 mt-auto flex items-center justify-between">
       <Avatar>
         <AvatarImage src="" />
-        <AvatarFallback>JD</AvatarFallback>
+        <AvatarFallback>{{ truncateName() }}</AvatarFallback>
       </Avatar>
       <DialogSettings />
       <ButtonColorMode />

@@ -50,8 +50,8 @@ export async function loginUserService(loginData: LoginData, router: Router) {
       // If the response is OK, set the received token in the user store.
       setAccessToken(response.data.access_token);
 
-      // Redirect the user to the chat view.
-      await router.push({ name: 'Chat' });
+      // Redirect the user to the NewChat view.
+      await router.push({ name: 'NewChat' });
 
       // Notify the user that they have successfully logged in.
       toast({

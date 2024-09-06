@@ -25,24 +25,40 @@ export const handleAuthFormTypeChange = (newAuthFormType: AuthFormType) => {
 };
 
 export const handleAxiosError = (err: unknown, router?: Router) => {
-  if (err instanceof AxiosError) {
-    const userStore = useUserStore();
-    const { $reset } = userStore;
-    const { toast } = useToast();
+  if (!(err instanceof AxiosError)) {
+    console.error(err);
+    return;
+  }
 
+  const userStore = useUserStore();
+  const { $reset } = userStore;
+  const { toast } = useToast();
+
+  const httpStatusCode = err.response?.status;
+  const detail = err.response?.data.detail;
+
+  if (httpStatusCode !== 422) {
     toast({
       title: 'Error',
-      description: err.response?.data.detail,
+      description: detail ?? 'An error occurred. Please try again.',
       variant: 'destructive'
     });
-
-    if (err.response?.status === 401) {
-      // If the user is not authenticated, reset the user store and redirect them to the Home route.
-      $reset();
-      router?.push({ name: 'Home' });
-    }
   } else {
-    console.error(err);
+    // TODO: Add a more specific error message for the user.
+    toast({
+      title: 'Error',
+      description: 'Provided data is invalid. Please check your input and try again.',
+      variant: 'destructive'
+    });
+  }
+
+  if (httpStatusCode === 401) {
+    // If the user is not authenticated, reset the user store and redirect them to the Home route.
+    $reset();
+    router?.push({ name: 'Home' });
+  } else {
+    // OPTIONAL: If the user is authenticated but the request fails, return the response status code. This allows the caller function to handle the error appropriately, such as redirecting the user to a different route.
+    return httpStatusCode;
   }
 };
 
