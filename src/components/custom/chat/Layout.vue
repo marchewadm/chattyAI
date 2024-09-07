@@ -4,27 +4,21 @@ import ButtonSelectChatModel from '@/components/custom/button/ButtonSelectChatMo
 </script>
 
 <template>
-  <!-- <div class="min-h-screen grid layout">
-    <NavBar class="shadow-right" />
-    <div class="grid container-layout dark:bg-gray-900">
-      <div class="w-fit mt-2 ml-2">
-        <ButtonSelectChatModel />
-      </div>
-      <div class="w-full my-4">
-        <slot></slot>
-      </div>
-    </div>
-  </div> -->
   <div class="grid layout">
     <NavBar class="shadow-right z-20" />
-    <div class="container-layout h-screen overflow-y-auto dark:bg-gray-900 relative">
-      <div class="sticky top-0 w-full pt-2 pl-2 bg-white dark:bg-inherit z-10">
+    <div class="dark:bg-gray-900 h-screen flex flex-col overflow-y-auto relative">
+      <div class="bg-white dark:bg-inherit w-full pt-2 pl-2 sticky top-0 z-10">
         <div class="w-fit">
           <ButtonSelectChatModel />
         </div>
       </div>
-      <div class="w-full">
-        <slot></slot>
+      <div class="w-full flex-grow">
+        <slot name="chat"></slot>
+      </div>
+      <div class="bg-white dark:bg-inherit w-full sticky bottom-0 z-10">
+        <div class="w-1/2 mx-auto py-3 relative">
+          <slot name="textarea"></slot>
+        </div>
       </div>
     </div>
   </div>
@@ -34,8 +28,4 @@ import ButtonSelectChatModel from '@/components/custom/button/ButtonSelectChatMo
 .layout {
   grid-template-columns: auto 1fr;
 }
-
-/* .container-layout {
-  grid-template-rows: auto 1fr;
-} */
 </style>

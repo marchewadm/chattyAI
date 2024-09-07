@@ -15,7 +15,7 @@ defineProps({
 </script>
 
 <template>
-  <Button variant="ghost" class="justify-start" as-child>
+  <Button variant="ghost" class="justify-start truncate tracking-tight" as-child>
     <RouterLink :to="{ name: 'ActiveChat', params: { room_uuid: chatRoomUuid } }">
       {{ chatTitle }}
     </RouterLink>
