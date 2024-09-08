@@ -46,7 +46,7 @@ const startNewChat = () => {
         @click="startNewChat"
       />
     </div>
-    <div class="chats flex flex-col gap-2 overflow-y-scroll">
+    <div class="chats flex flex-col gap-2 overflow-y-auto">
       <ButtonOpenChat
         v-for="chat in chatRooms"
         :key="chat.roomUuid"
