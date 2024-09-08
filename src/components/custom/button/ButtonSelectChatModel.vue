@@ -22,14 +22,10 @@ const { apiProvider, apiProviders } = storeToRefs(chatStore);
       <SelectValue placeholder="Select model" class="pr-2" />
     </SelectTrigger>
     <SelectContent class="dark:bg-gray-900 dark:border-gray-700">
-      <SelectGroup>
-        <SelectLabel>Available models</SelectLabel>
-        <SelectItem
-          v-for="(apiProvider, index) in apiProviders"
-          :value="apiProvider.value"
-          :key="index"
-        >
-          {{ apiProvider.label }}
+      <SelectGroup v-for="apiProvider in apiProviders" :key="apiProvider.apiProviderId">
+        <SelectLabel>{{ apiProvider.label }}</SelectLabel>
+        <SelectItem v-for="(aiModel, index) in apiProvider.aiModels" :value="aiModel" :key="index">
+          {{ aiModel }}
         </SelectItem>
       </SelectGroup>
     </SelectContent>

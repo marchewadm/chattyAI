@@ -49,14 +49,14 @@ const handleToast = () => {
     </div>
     <Separator />
     <div class="flex items-center">
-      <p class="text-sm">Default LLM</p>
+      <p class="text-sm">Default API</p>
       <Select>
         <SelectTrigger class="w-24 ml-auto">
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Available models</SelectLabel>
+            <SelectLabel>Available providers</SelectLabel>
             <SelectItem
               v-for="(apiProvider, index) in apiProviders"
               :value="apiProvider.value"

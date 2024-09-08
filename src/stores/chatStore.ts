@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { ApiProvider, ApiProvidersData, ApiKey, ApiKeyData } from '@/types/apiKey';
+import type { ApiProvider, GetApiProvidersResponse, ApiKey, ApiKeyData } from '@/types/apiKey';
 import type { GetChatHistoryResponse, ChatHistory } from '@/types/chatHistory';
 
 export const useChatStore = defineStore('chat', () => {
@@ -9,11 +9,12 @@ export const useChatStore = defineStore('chat', () => {
   const apiKeys = ref<ApiKey[]>([]);
   const chatHistory = ref<ChatHistory[]>([]);
 
-  function setApiProvidersData(apiProvidersData: ApiProvidersData[]) {
+  function setApiProvidersData(apiProvidersData: GetApiProvidersResponse[]) {
     apiProviders.value = apiProvidersData.map((apiProvider) => {
       return {
         value: apiProvider.name.toLowerCase(),
         label: apiProvider.name,
+        aiModels: apiProvider.aiModels,
         isDisabled: false,
         apiProviderId: apiProvider.id
       };

@@ -1,6 +1,7 @@
 export type ApiProvider = {
   value: string;
   label: string;
+  aiModels: string[];
   isDisabled: boolean;
   apiProviderId: number;
 };
@@ -13,9 +14,10 @@ export type ApiKey = {
   isRevealed: boolean;
 };
 
-export type ApiProvidersData = {
+export type GetApiProvidersResponse = {
   id: number;
   name: string;
+  aiModels: string[];
 };
 
 export type ApiKeyData = {

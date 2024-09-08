@@ -3,7 +3,7 @@ import { handleAxiosError } from '@/utils/utils';
 import { useChatStore } from '@/stores/chatStore';
 import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
-import type { ApiProvidersData } from '@/types/apiKey';
+import type { GetApiProvidersResponse } from '@/types/apiKey';
 import type { Router } from 'vue-router';
 
 // Set the prefix URL for the AI models routes, just to make the code look cleaner.
@@ -15,9 +15,12 @@ export async function getApiProvidersService(router: Router) {
   const { setApiProvidersData } = useChatStore();
 
   try {
-    const response = await axios.get<{ api_providers: ApiProvidersData[] }>(`${prefixURL}/all`, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const response = await axios.get<{ api_providers: GetApiProvidersResponse[] }>(
+      `${prefixURL}/all`,
+      {
+        headers: { Authorization: `Bearer ${accessToken.value}` }
+      }
+    );
 
     setApiProvidersData(response.data.api_providers);
   } catch (err) {
