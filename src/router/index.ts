@@ -31,10 +31,10 @@ const router = createRouter({
       beforeEnter: async (to) => {
         const roomUUID = to.params.room_uuid as string;
 
-        await getChatHistoryService(roomUUID, router);
         await getUserProfileService(router);
-        await getChatRoomsService(router);
         await getApiProvidersService(router);
+        await getChatRoomsService(router);
+        await getChatHistoryService(roomUUID, router);
       }
     }
   ]

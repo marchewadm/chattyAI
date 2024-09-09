@@ -4,10 +4,12 @@ import type { ApiProvider, GetApiProvidersResponse, ApiKey, ApiKeyData } from '@
 import type { GetChatHistoryResponse, ChatHistory } from '@/types/chatHistory';
 
 export const useChatStore = defineStore('chat', () => {
-  const apiProvider = ref<string>(); // TODO: use localstorage to save default LLM preference
+  const apiProvider = ref<ApiProvider>(); // TODO: use localstorage to save default LLM preference
   const apiProviders = ref<ApiProvider[]>([]);
   const apiKeys = ref<ApiKey[]>([]);
   const chatHistory = ref<ChatHistory[]>([]);
+  const aiModel = ref<string>();
+  const customInstructions = ref<string>('You are a helpful assistant.');
 
   function setApiProvidersData(apiProvidersData: GetApiProvidersResponse[]) {
     apiProviders.value = apiProvidersData.map((apiProvider) => {
@@ -56,6 +58,13 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   function setChatHistoryData(chatHistoryData: GetChatHistoryResponse) {
+    // TODO: create new ref value for aiModel, now it's using apiProvider ref value which is not correct, my bad, I'm almost sleeping
+
+    apiProvider.value = apiProviders.value.find((apiProvider) =>
+      apiProvider.aiModels.includes(chatHistoryData.aiModel)
+    );
+    aiModel.value = chatHistoryData.aiModel;
+
     chatHistoryData.messages.forEach((message) => {
       chatHistory.value.push(message);
     });
@@ -66,6 +75,8 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   function resetChatHistoryData() {
+    aiModel.value = undefined;
+    customInstructions.value = 'You are a helpful assistant.';
     chatHistory.value = [];
   }
 
@@ -74,6 +85,8 @@ export const useChatStore = defineStore('chat', () => {
     apiProviders,
     apiKeys,
     chatHistory,
+    aiModel,
+    customInstructions,
     setApiProvidersData,
     setUserApiKeysData,
     setChatHistoryData,

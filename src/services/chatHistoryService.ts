@@ -11,8 +11,10 @@ const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/chat-history`;
 export async function getChatHistoryService(room_uuid: string, router: Router) {
   try {
     const url = `${prefixURL}/${room_uuid}`;
+
     const userStore = useUserStore();
-    const { setChatHistoryData } = useChatStore();
+    const chatStore = useChatStore();
+    const { setChatHistoryData } = chatStore;
     const { accessToken } = storeToRefs(userStore);
 
     const response = await axios.get<GetChatHistoryResponse>(url, {
@@ -28,3 +30,5 @@ export async function getChatHistoryService(room_uuid: string, router: Router) {
     }
   }
 }
+
+export async function postChatHistoryService(room_uuid: string, message: string, router: Router) {}
