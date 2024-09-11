@@ -1,6 +1,7 @@
 export type GetChatHistoryResponse = {
   roomUuid: string;
   aiModel: string;
+  customInstructions: string;
   messages: ChatHistory[];
 };
 

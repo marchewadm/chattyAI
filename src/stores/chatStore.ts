@@ -64,6 +64,7 @@ export const useChatStore = defineStore('chat', () => {
       apiProvider.aiModels.includes(chatHistoryData.aiModel)
     );
     aiModel.value = chatHistoryData.aiModel;
+    customInstructions.value = chatHistoryData.customInstructions;
 
     chatHistoryData.messages.forEach((message) => {
       chatHistory.value.push(message);
