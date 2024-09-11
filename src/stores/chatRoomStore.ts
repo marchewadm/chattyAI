@@ -5,9 +5,21 @@ import type { ChatRoom, GetChatRoomsResponse } from '@/types/chatRoom';
 export const useChatRoomStore = defineStore('chatRoom', () => {
   const chatRooms = ref<ChatRoom[]>([]);
 
-  function setChatRoomsData(ChatRoomsData: GetChatRoomsResponse) {
-    chatRooms.value = ChatRoomsData.chatRooms;
+  function setChatRoomsData(chatRoomsData: GetChatRoomsResponse) {
+    chatRooms.value = chatRoomsData.chatRooms.map((chatRoom) => {
+      return {
+        roomUuid: chatRoom.roomUuid,
+        lastMessage: chatRoom.lastMessage,
+        apiProviderId: chatRoom.apiProviderId
+      };
+    });
   }
 
-  return { chatRooms, setChatRoomsData };
+  function updateChatRoomLastMessage(roomUuid: string, lastMessage: string) {
+    chatRooms.value = chatRooms.value.map((chatRoom) =>
+      chatRoom.roomUuid === roomUuid ? { ...chatRoom, lastMessage } : chatRoom
+    );
+  }
+
+  return { chatRooms, setChatRoomsData, updateChatRoomLastMessage };
 });
