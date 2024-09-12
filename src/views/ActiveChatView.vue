@@ -4,13 +4,16 @@ import Textarea from '@/components/custom/chat/Textarea.vue';
 import UserMessage from '@/components/custom/chat/UserMessage.vue';
 import AssistantMessage from '@/components/custom/chat/AssistantMessage.vue';
 
-import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
+import { useRoute, useRouter, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 import { storeToRefs } from 'pinia';
 import { useChatStore } from '@/stores/chatStore';
 import { useChatRoomStore } from '@/stores/chatRoomStore';
 
-import { postChatHistoryService } from '@/services/chatHistoryService';
+import { getChatHistoryService, postChatHistoryService } from '@/services/chatHistoryService';
+import { getUserProfileService } from '@/services/userService';
+import { getApiProvidersService } from '@/services/apiProviderService';
+import { getChatRoomsService } from '@/services/chatRoomService';
 
 const route = useRoute();
 const router = useRouter();
@@ -35,6 +38,16 @@ const onSendMessage = async (message: string) => {
 
 onBeforeRouteLeave(() => {
   resetChatHistoryData();
+});
+
+onBeforeRouteUpdate(async (to) => {
+  const roomUuid = to.params.room_uuid as string;
+
+  resetChatHistoryData();
+  await getUserProfileService(router);
+  await getApiProvidersService(router);
+  await getChatRoomsService(router);
+  await getChatHistoryService(roomUuid, router);
 });
 </script>
 

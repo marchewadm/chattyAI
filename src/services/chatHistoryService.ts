@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
 import { useChatStore } from '@/stores/chatStore';
 import { handleAxiosError } from '@/utils/utils';
+import { useToast } from '@/components/ui/toast';
 import type { Router } from 'vue-router';
 import type {
   GetChatHistoryResponse,
@@ -13,6 +14,8 @@ import type {
 } from '@/types/chatHistory';
 
 const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/chat-history`;
+
+const { toast } = useToast();
 
 export async function getChatHistoryService(room_uuid: string, router: Router) {
   try {
@@ -59,11 +62,14 @@ export async function postChatHistoryService(chatMessageData: ChatMessage, route
     const { apiProvider, aiModel, customInstructions, chatHistory } = storeToRefs(chatStore);
 
     if (!accessToken.value) {
-      console.log('Access token is not set');
       return;
     }
     if (!apiProvider.value || !aiModel.value) {
-      console.log('API Provider is not set');
+      toast({
+        title: 'Error',
+        description: 'You must select an AI model before sending a message.',
+        variant: 'destructive'
+      });
       return;
     }
 

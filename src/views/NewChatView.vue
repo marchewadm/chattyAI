@@ -6,7 +6,11 @@ import Textarea from '@/components/custom/chat/Textarea.vue';
 import ButtonTopicSuggestion from '@/components/custom/button/ButtonTopicSuggestion.vue';
 
 import { ref, onBeforeMount, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useMotion } from '@vueuse/motion';
+import { postChatHistoryService } from '@/services/chatHistoryService';
+
+const router = useRouter();
 
 const target = ref<HTMLElement>();
 const target2 = ref<HTMLElement>();
@@ -28,6 +32,14 @@ function createButtonTopicSuggestionData() {
       buttonTopicSuggestionDataTitle.push(typewriterData.title[i]);
       buttonTopicSuggestionDataText.push(typewriterData.text[i]);
     }
+  }
+}
+
+async function onSendMessage(message: string) {
+  const response = await postChatHistoryService({ message }, router);
+
+  if (response) {
+    router.push({ name: 'ActiveChat', params: { room_uuid: response.roomUuid } });
   }
 }
 
@@ -70,7 +82,7 @@ onMounted(() => {
       </div>
     </template>
     <template #textarea>
-      <Textarea />
+      <Textarea @sendMessage="onSendMessage" />
       <div class="absolute w-full grid grid-cols-2 gap-2 bottom-full mb-4 px-6" ref="target2">
         <ButtonTopicSuggestion
           v-for="(_, index) in buttonTopicSuggestionDataTitle"

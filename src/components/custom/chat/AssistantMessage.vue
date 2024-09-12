@@ -38,6 +38,25 @@ const renderedMessage = computed(() => {
 
 <template>
   <div class="col-span-2">
-    <p class="leading-7" v-html="renderedMessage"></p>
+    <p class="assistant-message leading-7" v-html="renderedMessage"></p>
   </div>
 </template>
+
+<style>
+.assistant-message ol,
+.assistant-message ul {
+  @apply pl-5;
+}
+
+.assistant-message ol {
+  @apply list-decimal;
+}
+
+.assistant-message ul {
+  @apply list-disc;
+}
+
+code:not(pre code) {
+  @apply bg-secondary p-1 rounded-md;
+}
+</style>
