@@ -54,7 +54,7 @@ onBeforeRouteUpdate(async (to) => {
 <template>
   <Layout>
     <template #chat>
-      <div class="w-1/2 mx-auto overflow-y-auto">
+      <div class="w-1/2 mx-auto">
         <div class="grid grid-cols-2 auto-rows-min gap-y-4">
           <template v-for="(messageObject, index) in chatHistory" :key="index">
             <UserMessage v-if="messageObject.role === 'user'" :message="messageObject.message" />
