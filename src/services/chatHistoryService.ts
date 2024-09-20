@@ -79,6 +79,7 @@ export async function postChatHistoryService(chatMessageData: ChatMessage, route
     // When the response is received, the original chat history will be updated.
     // This is done to prevent displaying the user's message before the response is received.
     const clonedChatHistory = structuredClone(toRaw(chatHistory.value));
+
     clonedChatHistory.push({
       message: chatMessageData.message,
       role: 'user'

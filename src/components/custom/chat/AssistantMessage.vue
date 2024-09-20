@@ -38,11 +38,15 @@ const renderedMessage = computed(() => {
 
 <template>
   <div class="col-span-2">
-    <p class="assistant-message leading-7" v-html="renderedMessage"></p>
+    <div class="assistant-message leading-7" v-html="renderedMessage"></div>
   </div>
 </template>
 
 <style>
+.assistant-message hr {
+  @apply my-4;
+}
+
 .assistant-message ol,
 .assistant-message ul {
   @apply pl-5;

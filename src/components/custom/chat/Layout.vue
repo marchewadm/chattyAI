@@ -3,13 +3,17 @@ import NavBar from '@/components/custom/nav/NavBar.vue';
 import ChatCustomizeModel from '@/components/custom/chat/ChatCustomizeModel.vue';
 
 import { ref, nextTick, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useEventBus } from '@vueuse/core';
+
 import { storeToRefs } from 'pinia';
 import { useChatStore } from '@/stores/chatStore';
-import { useRoute } from 'vue-router';
 
 const chatContainer = ref<HTMLDivElement | null>(null);
 
 const route = useRoute();
+
+const bus = useEventBus<string>('scrollToBottom');
 
 const chatStore = useChatStore();
 const { chatHistory } = storeToRefs(chatStore);
@@ -19,6 +23,11 @@ const scrollChatToBottom = () => {
     chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
   }
 };
+
+bus.on(async () => {
+  await nextTick();
+  scrollChatToBottom();
+});
 
 watch(chatHistory.value, async () => {
   await nextTick();
