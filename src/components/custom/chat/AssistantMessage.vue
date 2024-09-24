@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { delay } from '@/utils/utils';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/base16/material.css';
@@ -28,11 +29,36 @@ const props = defineProps({
   message: {
     type: String,
     required: true
+  },
+  isAnimated: {
+    type: Boolean,
+    default: false
   }
 });
 
+const visibleWords = ref(0);
+const wordsArray = ref<string[]>(props.message.split(' '));
+
+const typewriter = async () => {
+  for (let i = 0; i < wordsArray.value.length; i++) {
+    visibleWords.value = i + 1;
+    await delay(Math.random() * 80 + 20);
+  }
+};
+
 const renderedMessage = computed(() => {
-  return md.render(props.message);
+  if (props.isAnimated) {
+    const partialMessage = wordsArray.value.slice(0, visibleWords.value).join(' ');
+    return md.render(partialMessage);
+  } else {
+    return md.render(props.message);
+  }
+});
+
+onMounted(async () => {
+  if (props.isAnimated) {
+    await typewriter();
+  }
 });
 </script>
 

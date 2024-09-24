@@ -8,6 +8,7 @@ export type GetChatHistoryResponse = {
 export type ChatHistory = {
   message: string;
   role: 'user' | 'assistant';
+  isAnimated?: boolean;
 };
 
 export type ChatMessage = {

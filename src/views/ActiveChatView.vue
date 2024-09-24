@@ -45,7 +45,7 @@ const onSendMessage = async (message: string) => {
 
   if (response) {
     chatHistory.value.push({ message, role: 'user' });
-    chatHistory.value.push({ message: response.message, role: 'assistant' });
+    chatHistory.value.push({ message: response.message, role: 'assistant', isAnimated: true });
     updateChatRoomLastMessage(roomUuid, response.message);
   }
 
@@ -75,7 +75,11 @@ onBeforeRouteUpdate(async (to) => {
         <div class="grid grid-cols-2 auto-rows-min gap-y-4">
           <template v-for="(messageObject, index) in chatHistory" :key="index">
             <UserMessage v-if="messageObject.role === 'user'" :message="messageObject.message" />
-            <AssistantMessage v-else :message="messageObject.message" />
+            <AssistantMessage
+              v-else
+              :message="messageObject.message"
+              :isAnimated="messageObject.isAnimated"
+            />
           </template>
 
           <div class="col-start-2 justify-self-end relative mb-10" v-show="isWaitingForResponse">
