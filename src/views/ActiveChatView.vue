@@ -8,7 +8,6 @@ import { Icon } from '@iconify/vue';
 
 import { ref } from 'vue';
 import { useRoute, useRouter, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
-import { useEventBus } from '@vueuse/core';
 
 import { storeToRefs } from 'pinia';
 import { useChatStore } from '@/stores/chatStore';
@@ -25,8 +24,6 @@ const isWaitingForResponse = ref(false);
 const route = useRoute();
 const router = useRouter();
 
-const bus = useEventBus<string>('scrollToBottom');
-
 const chatStore = useChatStore();
 const { updateChatRoomLastMessage } = useChatRoomStore();
 
@@ -36,8 +33,6 @@ const { chatHistory } = storeToRefs(chatStore);
 const onSendMessage = async (message: string) => {
   messageToSend.value = message;
   isWaitingForResponse.value = true;
-
-  bus.emit();
 
   // TODO: Add some lock if the message was sent and there is a server response pending
   const roomUuid = route.params.room_uuid as string;

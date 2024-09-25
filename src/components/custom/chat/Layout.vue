@@ -2,46 +2,42 @@
 import NavBar from '@/components/custom/nav/NavBar.vue';
 import ChatCustomizeModel from '@/components/custom/chat/ChatCustomizeModel.vue';
 
-import { ref, nextTick, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { useEventBus } from '@vueuse/core';
-
-import { storeToRefs } from 'pinia';
-import { useChatStore } from '@/stores/chatStore';
+import { ref, onMounted } from 'vue';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 const chatContainer = ref<HTMLDivElement | null>(null);
 
-const route = useRoute();
-
-const bus = useEventBus<string>('scrollToBottom');
-
-const chatStore = useChatStore();
-const { chatHistory } = storeToRefs(chatStore);
+const resizeObserver = new ResizeObserver(() => scrollChatToBottom());
 
 const scrollChatToBottom = () => {
-  if (chatContainer.value) {
-    chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+  if (!chatContainer.value) return;
+
+  chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+};
+
+const handleObserverConnect = () => {
+  if (!chatContainer.value) return;
+
+  for (const child of chatContainer.value.children) {
+    resizeObserver.observe(child);
   }
 };
 
-bus.on(async () => {
-  await nextTick();
-  scrollChatToBottom();
+const handleObserverDisconnect = () => {
+  resizeObserver.disconnect();
+};
+
+onMounted(() => {
+  handleObserverConnect();
 });
 
-watch(chatHistory.value, async () => {
-  await nextTick();
-  scrollChatToBottom();
+onBeforeRouteLeave(() => {
+  handleObserverDisconnect();
 });
 
-watch(route, async () => {
-  await nextTick();
-  scrollChatToBottom();
-});
-
-onMounted(async () => {
-  await nextTick();
-  scrollChatToBottom();
+onBeforeRouteUpdate(() => {
+  handleObserverDisconnect();
+  handleObserverConnect();
 });
 </script>
 
