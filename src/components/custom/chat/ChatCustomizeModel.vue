@@ -67,7 +67,7 @@ onKeyStroke('Escape', () => {
       <Tooltip>
         <TooltipTrigger asChild>
           <ButtonIcon
-            iconName="options-outline"
+            iconName="adjustments-horizontal"
             @click="toggleCard"
             :variant="isCardOpen ? 'secondary' : 'ghost'"
           />
@@ -90,7 +90,7 @@ onKeyStroke('Escape', () => {
             <ButtonIcon
               role="combobox"
               :aria-expanded="isPopoverOpen"
-              :iconName="isPopoverOpen ? 'chevron-up-outline' : 'chevron-down-outline'"
+              :iconName="isPopoverOpen ? 'chevron-up' : 'chevron-down'"
               :text="aiModel ? aiModel : 'Select model'"
               size="default"
               variant="outline"
@@ -113,11 +113,7 @@ onKeyStroke('Escape', () => {
                     @select="onModelSelect(model)"
                   >
                     {{ model }}
-                    <Icon
-                      icon="ion:checkmark-outline"
-                      class="w-5 h-5 ml-auto"
-                      v-if="aiModel === model"
-                    />
+                    <Icon icon="tabler:check" class="w-5 h-5 ml-auto" v-if="aiModel === model" />
                   </CommandItem>
                 </CommandGroup>
               </CommandList>

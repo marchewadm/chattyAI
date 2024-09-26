@@ -47,7 +47,7 @@ const hideApiKeysTab = (isDialogVisible: boolean) => {
 <template>
   <Dialog @update:open="hideApiKeysTab">
     <DialogTrigger as-child>
-      <ButtonIcon iconName="settings-outline" />
+      <ButtonIcon iconName="settings" />
     </DialogTrigger>
     <DialogContent class="min-w-[600px]">
       <DialogHeader>
@@ -60,7 +60,7 @@ const hideApiKeysTab = (isDialogVisible: boolean) => {
       <div class="grid settings-layout h-[360px]">
         <div class="flex flex-col gap-y-2 mr-6">
           <ButtonIcon
-            iconName="settings-outline"
+            iconName="settings"
             :isIconFirst="true"
             text="General"
             textClass="font-normal"
@@ -70,7 +70,7 @@ const hideApiKeysTab = (isDialogVisible: boolean) => {
             @click="activeTab = 'general'"
           />
           <ButtonIcon
-            iconName="person-outline"
+            iconName="user"
             :isIconFirst="true"
             text="Profile"
             textClass="font-normal"
@@ -80,7 +80,7 @@ const hideApiKeysTab = (isDialogVisible: boolean) => {
             @click="activeTab = 'profile'"
           />
           <ButtonIcon
-            iconName="key-outline"
+            iconName="key"
             :isIconFirst="true"
             text="API Keys"
             textClass="font-normal"

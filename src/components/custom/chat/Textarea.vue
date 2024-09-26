@@ -39,8 +39,8 @@ onBeforeRouteUpdate(() => {
       @keydown.enter.prevent="sendMessage"
     />
     <div class="flex absolute left-full top-1/2 -translate-y-1/2">
-      <ButtonIconChatAction iconName="send" @click="sendMessage" />
-      <ButtonIconChatAction iconName="mic" />
+      <ButtonIconChatAction iconName="send-2" @click="sendMessage" />
+      <ButtonIconChatAction iconName="microphone" />
     </div>
   </div>
 </template>

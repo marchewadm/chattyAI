@@ -78,8 +78,8 @@ const onSubmit = form.handleSubmit(async (values) => {
           <span class="bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
       </div>
-      <ButtonThirdPartyAccess iconName="logo-google" text="Sign up with Google" />
-      <ButtonThirdPartyAccess iconName="logo-github" text="Sign up with GitHub" />
+      <ButtonThirdPartyAccess iconName="brand-google-filled" text="Sign up with Google" />
+      <ButtonThirdPartyAccess iconName="brand-github" text="Sign up with GitHub" />
     </template>
     <template #formFooterText>Already have an account? </template>
     <template #formFooterButton>Sign in</template>

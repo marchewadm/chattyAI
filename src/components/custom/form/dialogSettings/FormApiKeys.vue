@@ -100,7 +100,7 @@ onBeforeMount(async () => {
                 <div class="absolute">
                   <ButtonIcon
                     type="button"
-                    :iconName="apiKey.isRevealed ? 'eye-off-outline' : 'eye-outline'"
+                    :iconName="apiKey.isRevealed ? 'eye-off' : 'eye'"
                     variant="ghost"
                     @click="toggleRevealApiKey(apiKey)"
                   />
@@ -164,7 +164,7 @@ onBeforeMount(async () => {
         </div>
         <ButtonIcon
           type="button"
-          iconName="add-outline"
+          iconName="plus"
           class="w-8 h-8"
           size="icon"
           v-show="apiKey === apiKeys[apiKeys.length - 1]"
@@ -172,7 +172,7 @@ onBeforeMount(async () => {
         />
         <ButtonIcon
           type="button"
-          iconName="trash-outline"
+          iconName="trash"
           class="w-8 h-8"
           size="icon"
           variant="destructive"

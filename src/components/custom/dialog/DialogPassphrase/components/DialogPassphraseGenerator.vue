@@ -75,7 +75,7 @@ const generatePassphrase = async () => {
       <div class="absolute">
         <ButtonIcon
           type="button"
-          :iconName="isRevealed ? 'eye-off-outline' : 'eye-outline'"
+          :iconName="isRevealed ? 'eye-off' : 'eye'"
           variant="ghost"
           @click="isRevealed = !isRevealed"
         />

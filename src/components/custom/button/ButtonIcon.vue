@@ -6,7 +6,7 @@ import type { PropType } from 'vue';
 import type { ButtonVariant } from '@/types/button';
 import type { ButtonSize } from '@/types/button';
 
-const iconPrefix = 'ion';
+const iconPrefix = 'tabler';
 
 defineProps({
   iconName: {

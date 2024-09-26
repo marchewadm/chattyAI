@@ -42,8 +42,8 @@ onBeforeRouteUpdate(() => {
 </script>
 
 <template>
-  <div class="grid layout">
-    <NavBar class="shadow-right z-20" />
+  <main class="grid layout">
+    <NavBar class="z-20" />
     <div
       class="dark:bg-gray-900 h-screen flex flex-col overflow-y-auto relative"
       ref="chatContainer"
@@ -60,7 +60,7 @@ onBeforeRouteUpdate(() => {
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>

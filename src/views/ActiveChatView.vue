@@ -83,7 +83,7 @@ onBeforeRouteUpdate(async (to) => {
                 {{ messageToSend }}
               </p>
             </div>
-            <Icon icon="lucide:loader-circle" class="animate-spin w-4 h-4 absolute right-0 my-2" />
+            <Icon icon="tabler:loader-2" class="animate-spin w-4 h-4 absolute right-0 my-2" />
           </div>
         </div>
       </div>
