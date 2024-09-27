@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavBar from '@/components/custom/nav/NavBar.vue';
+import Sidebar from '@/components/custom//sidebar/Sidebar.vue';
 import ChatCustomizeModel from '@/components/custom/chat/ChatCustomizeModel.vue';
 
 import { ref, onMounted } from 'vue';
@@ -43,7 +43,7 @@ onBeforeRouteUpdate(() => {
 
 <template>
   <main class="grid layout">
-    <NavBar class="z-20" />
+    <Sidebar />
     <div
       class="dark:bg-gray-900 h-screen flex flex-col overflow-y-auto relative"
       ref="chatContainer"

@@ -6,6 +6,7 @@ import DialogSettingsProfile from '@/components/custom/dialog/DialogSettings/com
 import DialogSettingsApiKeys from '@/components/custom/dialog/DialogSettings/components/DialogSettingsApiKeys.vue';
 
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   Dialog,
   DialogContent,
@@ -46,9 +47,16 @@ const hideApiKeysTab = (isDialogVisible: boolean) => {
 
 <template>
   <Dialog @update:open="hideApiKeysTab">
-    <DialogTrigger as-child>
-      <ButtonIcon iconName="settings" />
-    </DialogTrigger>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <ButtonIcon iconName="settings" />
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent side="right" :sideOffset="10">Settings</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
     <DialogContent class="min-w-[600px]">
       <DialogHeader>
         <DialogTitle>Settings</DialogTitle>
