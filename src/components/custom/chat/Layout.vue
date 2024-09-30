@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Sidebar from '@/components/custom//sidebar/Sidebar.vue';
 import ChatCustomizeModel from '@/components/custom/chat/ChatCustomizeModel.vue';
+import DialogPassphrase from '@/components/custom/dialog/DialogPassphrase/DialogPassphrase.vue';
 
 import { ref, onMounted } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
@@ -43,6 +44,7 @@ onBeforeRouteUpdate(() => {
 
 <template>
   <main class="grid layout">
+    <DialogPassphrase />
     <Sidebar />
     <div
       class="dark:bg-gray-900 h-screen flex flex-col overflow-y-auto relative"

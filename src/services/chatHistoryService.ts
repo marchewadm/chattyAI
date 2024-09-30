@@ -3,6 +3,7 @@ import { toRaw } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
 import { useChatStore } from '@/stores/chatStore';
+import { useDialogStore } from '@/stores/dialogStore';
 import { handleAxiosError } from '@/utils/utils';
 import { useToast } from '@/components/ui/toast';
 import type { Router } from 'vue-router';
@@ -73,8 +74,6 @@ export async function postChatHistoryService(chatMessageData: ChatMessage, route
       return;
     }
 
-    // TODO: Refactor this to use a better approach, such as a loading spinner and displaying the user's message immediately.
-    // ---------------------------------------------------------------------------
     // Clone chat history to send it to the backend and wait for the response.
     // When the response is received, the original chat history will be updated.
     // This is done to prevent displaying the user's message before the response is received.
@@ -98,6 +97,12 @@ export async function postChatHistoryService(chatMessageData: ChatMessage, route
         return await postOpenAiChatHistoryService(chatHistoryData, accessToken.value);
     }
   } catch (err) {
-    handleAxiosError(err, router);
+    const httpStatusCode = handleAxiosError(err, router);
+    const dialogStore = useDialogStore();
+    const { togglePassphraseDialog } = dialogStore;
+
+    if (httpStatusCode === 403) {
+      togglePassphraseDialog();
+    }
   }
 }

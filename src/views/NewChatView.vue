@@ -43,6 +43,14 @@ async function onSendMessage(message: string) {
   }
 }
 
+async function onSelectTopicSuggestion(topicIndex: number) {
+  const topicTitle = buttonTopicSuggestionDataTitle[topicIndex];
+  const topicText = buttonTopicSuggestionDataText[topicIndex];
+  const message = `${topicTitle} ${topicText}`;
+
+  await onSendMessage(message);
+}
+
 onBeforeMount(() => {
   createButtonTopicSuggestionData();
 });
@@ -89,6 +97,7 @@ onMounted(() => {
           :key="index"
           :buttonTitle="buttonTopicSuggestionDataTitle[index]"
           :buttonText="buttonTopicSuggestionDataText[index]"
+          @click="onSelectTopicSuggestion(index)"
         />
       </div>
     </template>
