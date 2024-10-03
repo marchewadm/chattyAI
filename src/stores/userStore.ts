@@ -1,7 +1,7 @@
+import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
-import { ref } from 'vue';
-import type { UserProfileData } from '@/types/user';
+import type { UserProfile, PartialUserProfile } from '@/types/user.types';
 
 export const useUserStore = defineStore('user', () => {
   const name = ref<string | null>(null);
@@ -10,28 +10,32 @@ export const useUserStore = defineStore('user', () => {
   const isPassphrase = ref<boolean | null>(null);
   const accessToken = useStorage<string | null>('accessToken', null);
 
-  function $reset() {
+  const $reset = () => {
     name.value = null;
     email.value = null;
     avatar.value = null;
     accessToken.value = null;
-  }
+  };
 
-  function setAccessToken(token: string) {
+  const setAccessToken = (token: string) => {
     accessToken.value = token;
-  }
+  };
 
-  function setUserProfileData(userProfileData: UserProfileData) {
-    name.value = userProfileData.name;
-    email.value = userProfileData.email;
-    avatar.value = userProfileData.avatar;
-    isPassphrase.value = userProfileData.isPassphrase;
-  }
+  const setUserProfile = (userProfile: UserProfile) => {
+    name.value = userProfile.name;
+    email.value = userProfile.email;
+    avatar.value = userProfile.avatar;
+    isPassphrase.value = userProfile.isPassphrase;
+  };
 
-  function updateUserProfileData(partialProfileAccountData: { name?: string }) {
+  const updateUserProfile = (partialUserProfile: PartialUserProfile) => {
     // Email won't be updated immediately due to the verification process, that's why it's not included here.
-    if (partialProfileAccountData.name) name.value = partialProfileAccountData.name;
-  }
+    if (partialUserProfile.name) {
+      name.value = partialUserProfile.name;
+    }
+  };
+
+  const isUserAuthenticated = computed(() => accessToken.value !== null);
 
   return {
     name,
@@ -41,7 +45,8 @@ export const useUserStore = defineStore('user', () => {
     accessToken,
     $reset,
     setAccessToken,
-    setUserProfileData,
-    updateUserProfileData
+    setUserProfile,
+    updateUserProfile,
+    isUserAuthenticated
   };
 });
