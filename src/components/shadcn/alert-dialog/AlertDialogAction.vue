@@ -2,7 +2,7 @@
 import { type HTMLAttributes, computed } from 'vue'
 import { AlertDialogAction, type AlertDialogActionProps } from 'radix-vue'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/core/components/shadcn/button'
+import { buttonVariants } from '@/components/shadcn/button'
 
 const props = defineProps<AlertDialogActionProps & { class?: HTMLAttributes['class'] }>()
 

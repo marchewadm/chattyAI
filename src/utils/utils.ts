@@ -31,6 +31,7 @@ export const displayErrorNotification = (description: string) => {
   });
 };
 
+// TODO: Instead of using the router here, we could use event bus to emit an event and listen for it in the App.vue component or router?
 export const handleAxiosError = (err: unknown, router?: Router) => {
   if (!(err instanceof AxiosError)) {
     console.error(err);
@@ -46,7 +47,7 @@ export const handleAxiosError = (err: unknown, router?: Router) => {
   const errorMessage =
     httpStatusCode === HttpStatusCode.UnprocessableEntity
       ? 'Provided data is invalid. Please check your input and try again.'
-      : (detail ?? 'An error occurred. Please try again.');
+      : detail ?? 'An error occurred. Please try again.';
 
   displayErrorNotification(errorMessage);
 

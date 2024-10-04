@@ -5,13 +5,13 @@ import {
   displayErrorNotification,
   displaySuccessNotification
 } from '@/utils/utils';
-import { registerUserApi, loginUserApi } from '@/api/authenticationApi';
+import { registerUserClient, loginUserClient } from '@/api/authenticationClient';
 import type { RegisterUser, LoginUser } from '@/types/authentication.types';
 import type { Router } from 'vue-router';
 
 export async function registerUserService(registerUserData: RegisterUser) {
   try {
-    const response = await registerUserApi(registerUserData);
+    const response = await registerUserClient(registerUserData);
 
     if (response?.status === HttpStatusCode.Ok) {
       // If the response is OK, notify the user that they have successfully registered and now they need to verify their email to get full access.
@@ -31,7 +31,7 @@ export async function loginUserService(loginUserData: LoginUser, router: Router)
     formData.append('username', loginUserData.email);
     formData.append('password', loginUserData.password);
 
-    const response = await loginUserApi(formData);
+    const response = await loginUserClient(formData);
 
     if (response?.status === HttpStatusCode.Ok) {
       setAccessToken(response.data.access_token);

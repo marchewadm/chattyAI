@@ -17,6 +17,7 @@ import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
 import { useAlertDialogStore } from '@/stores/alertDialogStore';
 import { displaySuccessNotification } from '@/utils/utils';
+import { updateUserPassphraseService } from '@/services/userService';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -50,12 +51,15 @@ const onCopyToClipboard = () => {
   displaySuccessNotification('Your passphrase has been copied to the clipboard.');
 };
 
-const onGeneratePassphrase = () => {
-  // const passphrase = await updateUserPassphraseService(router);
-  // if (passphrase) {
-  //   inputTextValue.value = passphrase;
-  //   isPassphraseGenerated.value = true;
-  // }
+const onGeneratePassphrase = async () => {
+  const passphrase = await updateUserPassphraseService(router);
+
+  if (!passphrase) {
+    return;
+  }
+
+  inputTextValue.value = passphrase;
+  isPassphraseGenerated.value = true;
 };
 </script>
 

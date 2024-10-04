@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import AlertDialogPassphraseContainer from '@/components/custom/alert-dialog/AlertDialogPassphraseContainer.vue';
+import SidebarChatOptions from '@/components/custom/sidebar/SidebarChatOptions.vue';
 </script>
 
 <template>
   <main class="grid chat-layout">
     <AlertDialogPassphraseContainer />
+    <SidebarChatOptions />
   </main>
 </template>
 

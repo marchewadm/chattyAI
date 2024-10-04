@@ -1,6 +1,8 @@
-import { computed, ref } from 'vue';
-import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
+import { computed, ref } from 'vue';
+import { defineStore, storeToRefs } from 'pinia';
+import { useChatStore } from '@/stores/chatStore';
+import type { ApiKeyState, ApiKeyDetails } from '@/types/apiKeys.types';
 import type { UserProfile, PartialUserProfile } from '@/types/user.types';
 
 export const useUserStore = defineStore('user', () => {
@@ -9,6 +11,10 @@ export const useUserStore = defineStore('user', () => {
   const avatar = ref<string | null>(null);
   const isPassphrase = ref<boolean | null>(null);
   const accessToken = useStorage<string | null>('accessToken', null);
+  const apiKeys = ref<ApiKeyState[]>([]);
+
+  const chatStore = useChatStore();
+  const { apiProviders } = storeToRefs(chatStore);
 
   const $reset = () => {
     name.value = null;
@@ -26,6 +32,35 @@ export const useUserStore = defineStore('user', () => {
     email.value = userProfile.email;
     avatar.value = userProfile.avatar;
     isPassphrase.value = userProfile.isPassphrase;
+  };
+
+  const setUserApiKeys = (apiKeysDetails: ApiKeyDetails[]) => {
+    apiKeysDetails.forEach((apiKey) => {
+      const apiProvider = apiProviders.value.find(
+        (apiProvider) => apiProvider.lowerCaseName === apiKey.apiProviderLowerCaseName
+      );
+
+      if (!apiProvider) {
+        return;
+      }
+
+      apiProvider.isSelected = true;
+
+      apiKeys.value.push({
+        id: apiKeys.value.length,
+        key: apiKey.key,
+        apiProvider,
+        isOpen: false,
+        isRevealed: false
+      });
+    });
+
+    // Add an empty api key object to the array to allow the user to add a new api key
+    apiKeys.value.push({
+      id: apiKeys.value.length,
+      isOpen: false,
+      isRevealed: false
+    });
   };
 
   const updateUserProfile = (partialUserProfile: PartialUserProfile) => {
@@ -46,6 +81,7 @@ export const useUserStore = defineStore('user', () => {
     $reset,
     setAccessToken,
     setUserProfile,
+    setUserApiKeys,
     updateUserProfile,
     isUserAuthenticated
   };

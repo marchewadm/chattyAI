@@ -3,10 +3,8 @@ import { defineStore } from 'pinia';
 import type { PassphraseAlertDialog } from '@/types/alertDialog.types';
 
 export const useAlertDialogStore = defineStore('alertDialog', () => {
-  // const passphraseAlertDialog = ref<PassphraseAlertDialog>('create');
-  const passphraseAlertDialog = ref<PassphraseAlertDialog>('validate');
-  // const isPassphraseAlertDialog = ref(false);
-  const isPassphraseAlertDialog = ref(true);
+  const passphraseAlertDialog = ref<PassphraseAlertDialog>('create');
+  const isPassphraseAlertDialog = ref(false);
 
   const $reset = () => {
     passphraseAlertDialog.value = 'create';

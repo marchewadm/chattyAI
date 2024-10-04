@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import { validatePassphraseSchema } from '@/schemas/passphrase.schemas';
+import { getApiKeysService } from '@/services/apiKeysService';
 
 const router = useRouter();
 
@@ -18,7 +19,7 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-  console.log(values);
+  await getApiKeysService(values, router);
 });
 </script>
 
