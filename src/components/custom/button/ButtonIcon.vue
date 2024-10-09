@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { Button } from '@/components/shadcn/button';
+import type { ComputedRef } from 'vue';
 import type { ButtonVariants } from '@/components/shadcn/button';
 
 interface Props {
-  iconName: string;
+  iconName: string | ComputedRef<string>;
   iconClass?: string;
   size?: ButtonVariants['size'];
   variant?: ButtonVariants['variant'];

@@ -35,7 +35,7 @@ export async function loginUserService(loginUserData: LoginUser, router: Router)
 
     if (response?.status === HttpStatusCode.Ok) {
       setAccessToken(response.data.access_token);
-      await router.push({ name: 'NewChat' });
+      await router.push({ name: 'ChatCreate' });
       displaySuccessNotification('You have successfully logged in.');
     }
   } catch (err) {

@@ -16,11 +16,18 @@ export const useUserStore = defineStore('user', () => {
   const chatStore = useChatStore();
   const { apiProviders } = storeToRefs(chatStore);
 
+  // Option Stores have its own reset method but Setup Stores don't - that's why we need to create our own reset method with "$" prefix
   const $reset = () => {
     name.value = null;
     email.value = null;
     avatar.value = null;
+    isPassphrase.value = null;
     accessToken.value = null;
+    apiKeys.value = [];
+  };
+
+  const resetApiKeys = () => {
+    apiKeys.value = [];
   };
 
   const setAccessToken = (token: string) => {
@@ -78,7 +85,9 @@ export const useUserStore = defineStore('user', () => {
     avatar,
     isPassphrase,
     accessToken,
+    apiKeys,
     $reset,
+    resetApiKeys,
     setAccessToken,
     setUserProfile,
     setUserApiKeys,

@@ -1,4 +1,7 @@
-export type ApiProvider = {
+import * as z from 'zod';
+import { apiKeysSchema } from '@/schemas/apiKeys.schemas';
+
+export type ApiProviderState = {
   name: string;
   lowerCaseName: string;
   aiModels: string[];
@@ -6,10 +9,16 @@ export type ApiProvider = {
   isSelected: boolean;
 };
 
+export type ApiProviderDetails = {
+  id: number;
+  name: string;
+  aiModels: string[];
+};
+
 export type ApiKeyState = {
   id: number;
   key?: string;
-  apiProvider?: ApiProvider;
+  apiProvider?: ApiProviderState;
   isOpen: boolean;
   isRevealed: boolean;
 };
@@ -21,3 +30,5 @@ export type ApiKeyDetails = {
   apiProviderName: string;
   apiProviderLowerCaseName: string;
 };
+
+export type UpdateApiKeys = z.infer<typeof apiKeysSchema>;

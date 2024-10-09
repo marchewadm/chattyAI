@@ -2,6 +2,7 @@
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
 import DialogSettingsGeneral from '@/components/custom/dialog/DialogSettingsGeneral.vue';
 import DialogSettingsProfile from '@/components/custom/dialog/DialogSettingsProfile.vue';
+import DialogSettingsApiKeys from '@/components/custom/dialog/DialogSettingsApiKeys.vue';
 import AlertDialogPassphraseContainer from '@/components/custom/alert-dialog/AlertDialogPassphraseContainer.vue';
 import { Separator } from '@/components/shadcn/separator';
 import {
@@ -18,17 +19,20 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/shadcn/dialog';
+import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useAlertDialogStore } from '@/stores/alertDialogStore';
 import { useDialogSettingsStore } from '@/stores/dialogSettingsStore';
+import { usePassphraseValidationBus } from '@/utils/eventBus';
 
-const alertDialogStore = useAlertDialogStore();
 const dialogSettingsStore = useDialogSettingsStore();
-
-const { $reset } = alertDialogStore;
+const { onSuccess } = usePassphraseValidationBus();
 
 const { setDialogSettings, onSwitchToApiKeys, onDialogSettingsToggle } = dialogSettingsStore;
 const { dialogSettings } = storeToRefs(dialogSettingsStore);
+
+onMounted(() => {
+  onSuccess();
+});
 </script>
 
 <template>
@@ -94,8 +98,7 @@ const { dialogSettings } = storeToRefs(dialogSettingsStore);
         </div>
         <DialogSettingsGeneral v-show="dialogSettings === 'general'" />
         <DialogSettingsProfile v-show="dialogSettings === 'profile'" />
-        <!-- <DialogSettingsProfile v-if="activeTab === 'profile'" />
-        <DialogSettingsApiKeys v-if="activeTab === 'apiKeys'" /> -->
+        <DialogSettingsApiKeys v-if="dialogSettings === 'apiKeys'" />
       </div>
       <AlertDialogPassphraseContainer />
     </DialogContent>

@@ -2,6 +2,7 @@ import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
 import { displaySuccessNotification, handleAxiosError } from '@/utils/utils';
 import {
+  getUserProfileClient,
   updateUserProfileClient,
   updateUserPasswordClient,
   updateUserPassphraseClient
@@ -11,6 +12,20 @@ import type {
   PartialProfileAccountDetails,
   ProfilePasswordDetails
 } from '@/types/settingsProfile.types';
+
+export async function getUserProfileService(router: Router) {
+  try {
+    const userStore = useUserStore();
+    const { setUserProfile } = userStore;
+    const { accessToken } = storeToRefs(userStore);
+
+    const response = await getUserProfileClient(accessToken.value!);
+
+    setUserProfile(response.data);
+  } catch (err) {
+    handleAxiosError(err, router);
+  }
+}
 
 export async function updateUserProfileService(
   partialProfileAccount: PartialProfileAccountDetails,
