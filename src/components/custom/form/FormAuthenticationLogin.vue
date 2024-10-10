@@ -59,7 +59,7 @@ const onSubmit = form.handleSubmit(async (values) => {
           <FormLabel>Password</FormLabel>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <button
                   class="text-sm underline flex"
                   type="button"
