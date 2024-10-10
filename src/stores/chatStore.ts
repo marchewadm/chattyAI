@@ -5,52 +5,7 @@ import type { ApiProviderState, ApiProviderDetails } from '@/types/apiKeys.types
 
 export const useChatStore = defineStore('chat', () => {
   const apiProvider = ref<ApiProviderState | null>(null);
-  // const apiProviders = ref<ApiProviderState[]>([]);
-  // DUMMY DATA
-  const apiProviders = ref<ApiProviderState[]>([
-    // {
-    //   name: 'Google',
-    //   lowerCaseName: 'google',
-    //   aiModels: ['Text Classification', 'Sentiment Analysis', 'Entity Recognition'],
-    //   apiProviderId: 1,
-    //   isSelected: false
-    // },
-    // {
-    //   name: 'Microsoft',
-    //   lowerCaseName: 'microsoft',
-    //   aiModels: ['Text Classification', 'Sentiment Analysis', 'Entity Recognition'],
-    //   apiProviderId: 2,
-    //   isSelected: false
-    // },
-    // {
-    //   name: 'Amazon',
-    //   lowerCaseName: 'amazon',
-    //   aiModels: ['Text Classification', 'Sentiment Analysis', 'Entity Recognition'],
-    //   apiProviderId: 3,
-    //   isSelected: false
-    // },
-    // {
-    //   name: 'IBM',
-    //   lowerCaseName: 'ibm',
-    //   aiModels: ['Text Classification', 'Sentiment Analysis', 'Entity Recognition'],
-    //   apiProviderId: 4,
-    //   isSelected: false
-    // },
-    // {
-    //   name: 'OpenAI',
-    //   lowerCaseName: 'openai',
-    //   aiModels: ['Text Classification', 'Sentiment Analysis', 'Entity Recognition'],
-    //   apiProviderId: 5,
-    //   isSelected: false
-    // },
-    // {
-    //   name: 'Hugging Face',
-    //   lowerCaseName: 'hugging face',
-    //   aiModels: ['Text Classification', 'Sentiment Analysis', 'Entity Recognition'],
-    //   apiProviderId: 6,
-    //   isSelected: false
-    // }
-  ]);
+  const apiProviders = ref<ApiProviderState[]>([]);
   const aiModel = ref<string | null>(null);
   const customInstructions = ref<string>('You are a helpful assistant.');
   const chatRooms = ref<ChatRoom[]>([]);
