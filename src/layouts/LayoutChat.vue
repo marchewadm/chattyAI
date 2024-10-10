@@ -59,7 +59,7 @@ onBeforeRouteUpdate(() => {
       </div>
       <div class="sticky w-full bg-white dark:bg-inherit bottom-0 z-10">
         <div class="relative w-1/2 py-3 mx-auto">
-          <slot name="textarea"></slot>
+          <slot name="textareaContent"></slot>
         </div>
       </div>
     </div>
