@@ -15,7 +15,7 @@ defineProps<{
   >
     <RouterLink
       activeClass="bg-secondary"
-      :to="{ name: 'ActiveChat', params: { room_uuid: chatRoomUuid } }"
+      :to="{ name: 'ChatActive', params: { room_uuid: chatRoomUuid } }"
     >
       <span class="w-full truncate tracking-tight">
         {{ chatTitle }}
