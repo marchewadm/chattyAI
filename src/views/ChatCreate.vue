@@ -6,6 +6,7 @@ import ButtonChatTopicSuggestion from '@/components/custom/button/ButtonChatTopi
 import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMotion } from '@vueuse/motion';
+import { postChatHistoryService } from '@/services/chatHistoryService';
 
 const greetingHeadingRef = ref<HTMLHeadingElement | null>(null);
 const buttonsContainerRef = ref<HTMLDivElement | null>(null);
@@ -30,11 +31,11 @@ const generateRandomButtonTopicSuggestions = () => {
 };
 
 const onSendMessage = async (message: string) => {
-  console.log(message);
-  // const response = await postChatHistoryService({ message }, router);
-  // if (response) {
-  //   router.push({ name: 'ActiveChat', params: { room_uuid: response.roomUuid } });
-  // }
+  const response = await postChatHistoryService({ message }, router);
+
+  if (response) {
+    router.push({ name: 'ActiveChat', params: { room_uuid: response.roomUuid } });
+  }
 };
 
 const onSelectTopicSuggestion = async (topicIndex: number) => {

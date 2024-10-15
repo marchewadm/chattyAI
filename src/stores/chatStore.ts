@@ -1,14 +1,15 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { ChatRoom } from '@/types/chat.types';
+import type { ChatRoom, ChatMessageDetails, ChatRoomDetails } from '@/types/chat.types';
 import type { ApiProviderState, ApiProviderDetails } from '@/types/apiKeys.types';
 
 export const useChatStore = defineStore('chat', () => {
+  const aiModel = ref<string | null>(null);
   const apiProvider = ref<ApiProviderState | null>(null);
   const apiProviders = ref<ApiProviderState[]>([]);
-  const aiModel = ref<string | null>(null);
-  const customInstructions = ref<string>('You are a helpful assistant.');
   const chatRooms = ref<ChatRoom[]>([]);
+  const chatMessages = ref<ChatMessageDetails[]>([]);
+  const customInstructions = ref<string>('You are a helpful assistant.');
 
   const setChatRooms = (chatRoomsData: ChatRoom[]) => {
     chatRooms.value = chatRoomsData.map((chatRoom) => {
@@ -16,6 +17,23 @@ export const useChatStore = defineStore('chat', () => {
         roomUuid: chatRoom.roomUuid,
         lastMessage: chatRoom.lastMessage,
         apiProviderId: chatRoom.apiProviderId
+      };
+    });
+  };
+
+  const setChatHistory = (chatRoomDetails: Required<ChatRoomDetails>) => {
+    aiModel.value = chatRoomDetails.aiModel;
+    customInstructions.value = chatRoomDetails.customInstructions;
+
+    apiProvider.value =
+      apiProviders.value.find((apiProvider) => {
+        return apiProvider.aiModels.includes(chatRoomDetails.aiModel);
+      }) ?? null;
+
+    chatMessages.value = chatRoomDetails.messages.map((messageObject) => {
+      return {
+        message: messageObject.message,
+        role: messageObject.role
       };
     });
   };
@@ -39,12 +57,14 @@ export const useChatStore = defineStore('chat', () => {
   };
 
   return {
+    aiModel,
     apiProvider,
     apiProviders,
-    aiModel,
-    customInstructions,
     chatRooms,
+    chatMessages,
+    customInstructions,
     setChatRooms,
+    setChatHistory,
     setApiProviders,
     updateChatRoomLastMessage
   };
