@@ -15,10 +15,15 @@ export const useAlertDialogStore = defineStore('alertDialog', () => {
     passphraseAlertDialog.value = alertDialog;
   };
 
+  const togglePassphraseAlertDialog = () => {
+    isPassphraseAlertDialog.value = !isPassphraseAlertDialog.value;
+  };
+
   return {
     passphraseAlertDialog,
     isPassphraseAlertDialog,
     $reset,
-    setPassphraseAlertDialog
+    setPassphraseAlertDialog,
+    togglePassphraseAlertDialog
   };
 });

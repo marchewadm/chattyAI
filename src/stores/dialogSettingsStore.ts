@@ -1,13 +1,13 @@
 import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import { useAlertDialogStore } from '@/stores/alertDialogStore';
-import { defineStore, storeToRefs } from 'pinia';
 import type { DialogSettings } from '@/types/dialogSettings.types';
 
 export const useDialogSettingsStore = defineStore('dialogSettings', () => {
   const dialogSettings = ref<DialogSettings>('general');
 
   const alertDialogStore = useAlertDialogStore();
-  const { isPassphraseAlertDialog } = storeToRefs(alertDialogStore);
+  const { togglePassphraseAlertDialog } = alertDialogStore;
 
   const setDialogSettings = (dialog: DialogSettings) => {
     dialogSettings.value = dialog;
@@ -15,7 +15,7 @@ export const useDialogSettingsStore = defineStore('dialogSettings', () => {
 
   const onSwitchToApiKeys = () => {
     if (dialogSettings.value !== 'apiKeys') {
-      isPassphraseAlertDialog.value = true;
+      togglePassphraseAlertDialog();
     } else {
       dialogSettings.value = 'apiKeys';
     }

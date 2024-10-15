@@ -1,5 +1,4 @@
 import { useEventBus } from '@vueuse/core';
-import { storeToRefs } from 'pinia';
 import { useAlertDialogStore } from '@/stores/alertDialogStore';
 import { useDialogSettingsStore } from '@/stores/dialogSettingsStore';
 
@@ -10,7 +9,7 @@ export function usePassphraseValidationBus() {
   const dialogSettingsStore = useDialogSettingsStore();
 
   const { setDialogSettings } = dialogSettingsStore;
-  const { isPassphraseAlertDialog } = storeToRefs(alertDialogStore);
+  const { togglePassphraseAlertDialog } = alertDialogStore;
 
   function emitSuccess() {
     passphraseValidationBus.emit();
@@ -18,7 +17,7 @@ export function usePassphraseValidationBus() {
 
   function onSuccess() {
     passphraseValidationBus.on(() => {
-      isPassphraseAlertDialog.value = false;
+      togglePassphraseAlertDialog();
       setDialogSettings('apiKeys');
     });
   }
