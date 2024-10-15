@@ -1,108 +1,70 @@
-import axios from 'axios';
-import { toRaw } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
 import { useChatStore } from '@/stores/chatStore';
-import { useDialogStore } from '@/stores/dialogStore';
-import { handleAxiosError } from '@/utils/utils';
-import { useToast } from '@/components/ui/toast';
+import { useAlertDialogStore } from '@/stores/alertDialogStore';
+import { HttpStatusCode } from 'axios';
+import { displayErrorNotification, handleAxiosError } from '@/utils/utils';
+import { getChatHistoryClient, postChatHistoryClient } from '@/api/chatHistoryClient';
 import type { Router } from 'vue-router';
-import type {
-  GetChatHistoryResponse,
-  ChatMessage,
-  PostChatHistoryRequest,
-  PostChatHistoryResponse
-} from '@/types/chatHistory';
+import type { ChatMessage, ChatRoomDetailsPayload } from '@/types/chat.types';
+import { toRaw } from 'vue';
 
-const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/chat-history`;
-
-const { toast } = useToast();
-
-export async function getChatHistoryService(room_uuid: string, router: Router) {
+export async function getChatHistoryService(roomUuid: string, router: Router) {
   try {
-    const url = `${prefixURL}/${room_uuid}`;
-
     const userStore = useUserStore();
     const chatStore = useChatStore();
-    const { setChatHistoryData } = chatStore;
+    const { setChatHistory } = chatStore;
     const { accessToken } = storeToRefs(userStore);
 
-    const response = await axios.get<GetChatHistoryResponse>(url, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const response = await getChatHistoryClient(roomUuid, accessToken.value!);
 
-    setChatHistoryData(response.data);
+    setChatHistory(response.data);
   } catch (err) {
     const httpStatusCode = handleAxiosError(err, router);
 
-    if (httpStatusCode !== 401) {
-      router.push({ name: 'NewChat' });
+    if (httpStatusCode !== HttpStatusCode.Unauthorized) {
+      router.push({ name: 'ChatCreate' });
     }
   }
 }
 
-export async function postOpenAiChatHistoryService(
-  chatHistoryData: PostChatHistoryRequest,
-  accessToken: string
-) {
-  const url = `${import.meta.env.VITE_BACKEND_URL}/openai/chat`;
-
-  const response = await axios.post<PostChatHistoryResponse>(url, chatHistoryData, {
-    headers: { Authorization: `Bearer ${accessToken}` }
-  });
-
-  return response.data;
-}
-
-export async function postChatHistoryService(chatMessageData: ChatMessage, router: Router) {
+export async function postChatHistoryService({ roomUuid, message }: ChatMessage, router: Router) {
   try {
     const chatStore = useChatStore();
     const userStore = useUserStore();
 
     const { accessToken } = storeToRefs(userStore);
-    const { apiProvider, aiModel, customInstructions, chatHistory } = storeToRefs(chatStore);
+    const { aiModel, apiProvider, chatMessages, customInstructions } = storeToRefs(chatStore);
 
-    if (!accessToken.value) {
-      return;
-    }
     if (!apiProvider.value || !aiModel.value) {
-      toast({
-        title: 'Error',
-        description: 'You must select an AI model before sending a message.',
-        variant: 'destructive'
-      });
-      return;
+      return displayErrorNotification('You must select an AI model before sending a message.');
     }
 
-    // Clone chat history to send it to the backend and wait for the response.
-    // When the response is received, the original chat history will be updated.
-    // This is done to prevent displaying the user's message before the response is received.
-    const clonedChatHistory = structuredClone(toRaw(chatHistory.value));
-
-    clonedChatHistory.push({
-      message: chatMessageData.message,
-      role: 'user'
-    });
-
-    const chatHistoryData: PostChatHistoryRequest = {
-      roomUuid: chatMessageData.roomUuid,
+    const chatHistoryPayload: ChatRoomDetailsPayload = {
+      roomUuid,
       apiProviderId: apiProvider.value.apiProviderId,
       aiModel: aiModel.value,
       customInstructions: customInstructions.value,
-      messages: clonedChatHistory
+      messages: structuredClone(toRaw(chatMessages.value))
     };
 
-    switch (apiProvider.value.value) {
-      case 'openai':
-        return await postOpenAiChatHistoryService(chatHistoryData, accessToken.value);
-    }
+    chatHistoryPayload.messages.push({ message, role: 'user' });
+
+    const response = await postChatHistoryClient(
+      chatHistoryPayload,
+      apiProvider.value,
+      accessToken.value!
+    );
+
+    return response.data;
   } catch (err) {
     const httpStatusCode = handleAxiosError(err, router);
-    const dialogStore = useDialogStore();
-    const { togglePassphraseDialog } = dialogStore;
 
-    if (httpStatusCode === 403) {
-      togglePassphraseDialog();
+    if (httpStatusCode === HttpStatusCode.Forbidden) {
+      const alertDialogStore = useAlertDialogStore();
+      const { togglePassphraseAlertDialog } = alertDialogStore;
+
+      togglePassphraseAlertDialog();
     }
   }
 }

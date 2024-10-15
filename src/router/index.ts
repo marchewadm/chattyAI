@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/userStore';
+import { createRouter, createWebHistory } from 'vue-router';
 import { getUserProfileService } from '@/services/userService';
 import { getApiProvidersService } from '@/services/apiProviderService';
 import { getChatRoomsService } from '@/services/chatRoomService';
@@ -12,29 +12,29 @@ const router = createRouter({
     {
       path: '/',
       name: 'Home',
-      component: () => import('@/views/AuthView.vue')
+      component: () => import('@/views/AuthenticationView.vue')
     },
     {
       path: '/chat',
-      name: 'NewChat',
-      component: () => import('@/views/NewChatView.vue'),
+      name: 'ChatCreate',
+      component: () => import('@/views/ChatCreate.vue'),
       beforeEnter: async () => {
         await getUserProfileService(router);
-        await getChatRoomsService(router);
         await getApiProvidersService(router);
+        await getChatRoomsService(router);
       }
     },
     {
       path: '/chat/:room_uuid',
-      name: 'ActiveChat',
-      component: () => import('@/views/ActiveChatView.vue'),
+      name: 'ChatActive',
+      component: () => import('@/views/ChatActive.vue'),
       beforeEnter: async (to) => {
-        const roomUUID = to.params.room_uuid as string;
+        const roomUuid = to.params.room_uuid as string;
 
         await getUserProfileService(router);
         await getApiProvidersService(router);
         await getChatRoomsService(router);
-        await getChatHistoryService(roomUUID, router);
+        await getChatHistoryService(roomUuid, router);
       }
     }
   ]
@@ -42,16 +42,12 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const userStore = useUserStore();
-  const { accessToken } = storeToRefs(userStore);
+  const { isUserAuthenticated } = storeToRefs(userStore);
 
-  // If the user is not authenticated and they try to access a route that is not the Home route, redirect them to the Home route.
-  if (!accessToken.value && to.name !== 'Home') {
+  if (!isUserAuthenticated.value && to.name !== 'Home') {
     return { name: 'Home' };
-  }
-
-  // If the user is authenticated and they try to access the Home route, redirect them to the NewChat route.
-  if (accessToken.value && to.name === 'Home') {
-    return { name: 'NewChat' };
+  } else if (isUserAuthenticated.value && to.name === 'Home') {
+    return { name: 'ChatCreate' };
   }
 });
 

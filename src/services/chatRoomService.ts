@@ -1,26 +1,21 @@
-import axios from 'axios';
 import { storeToRefs } from 'pinia';
+import { useChatStore } from '@/stores/chatStore';
 import { useUserStore } from '@/stores/userStore';
-import { useChatRoomStore } from '@/stores/chatRoomStore';
 import { handleAxiosError } from '@/utils/utils';
+import { getChatRoomsClient } from '@/api/chatRoomClient';
 import type { Router } from 'vue-router';
-import type { GetChatRoomsResponse } from '@/types/chatRoom';
-
-const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/chat-room`;
 
 export async function getChatRoomsService(router: Router) {
   try {
-    const url = `${prefixURL}/all`;
-
+    const chatStore = useChatStore();
     const userStore = useUserStore();
-    const { setChatRoomsData } = useChatRoomStore();
+
+    const { setChatRooms } = chatStore;
     const { accessToken } = storeToRefs(userStore);
 
-    const response = await axios.get<GetChatRoomsResponse>(url, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const response = await getChatRoomsClient(accessToken.value!);
 
-    setChatRoomsData(response.data);
+    setChatRooms(response.data.chatRooms);
   } catch (err) {
     handleAxiosError(err, router);
   }
