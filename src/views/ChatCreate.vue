@@ -34,7 +34,7 @@ const onSendMessage = async (message: string) => {
   const response = await postChatHistoryService({ message }, router);
 
   if (response) {
-    router.push({ name: 'ActiveChat', params: { room_uuid: response.roomUuid } });
+    router.push({ name: 'ChatActive', params: { room_uuid: response.roomUuid } });
   }
 };
 

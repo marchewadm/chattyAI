@@ -11,6 +11,12 @@ export const useChatStore = defineStore('chat', () => {
   const chatMessages = ref<ChatMessageDetails[]>([]);
   const customInstructions = ref<string>('You are a helpful assistant.');
 
+  const resetChatHistory = () => {
+    aiModel.value = null;
+    chatMessages.value = [];
+    customInstructions.value = 'You are a helpful assistant.';
+  };
+
   const setChatRooms = (chatRoomsData: ChatRoom[]) => {
     chatRooms.value = chatRoomsData.map((chatRoom) => {
       return {
@@ -63,6 +69,7 @@ export const useChatStore = defineStore('chat', () => {
     chatRooms,
     chatMessages,
     customInstructions,
+    resetChatHistory,
     setChatRooms,
     setChatHistory,
     setApiProviders,
