@@ -24,7 +24,7 @@ import {
   AlertDialogFooter,
   AlertDialogTrigger
 } from '@/components/shadcn/alert-dialog';
-import { ref, computed, onBeforeMount, onBeforeUnmount } from 'vue';
+import { ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
@@ -39,6 +39,7 @@ import {
   setApiKeyFormFields,
   onApiProviderSelect,
   onApiKeyAdd,
+  onApiKeyUpdate,
   onApiKeyRemove
 } from '@/helpers/formApiKeysHelper';
 import type { ApiKeyState } from '@/types/apiKeys.types';
@@ -82,25 +83,21 @@ const toggleInputRevealed = (apiKey: ApiKeyState) => {
   apiKey.isRevealed = !apiKey.isRevealed;
 };
 
-const isLastApiKeyField = (apiKey: ApiKeyState) =>
-  computed(() => {
-    return apiKey === apiKeys.value[apiKeys.value.length - 1];
-  });
+const isLastApiKeyField = (apiKey: ApiKeyState) => {
+  return apiKey === apiKeys.value[apiKeys.value.length - 1];
+};
 
-const getInputIconName = (isRevealed: boolean) =>
-  computed(() => {
-    return isRevealed ? 'eye-off' : 'eye';
-  });
+const getInputIconName = (isRevealed: boolean) => {
+  return isRevealed ? 'eye-off' : 'eye';
+};
 
-const getInputType = (isRevealed: boolean) =>
-  computed(() => {
-    return isRevealed ? 'text' : 'password';
-  });
+const getInputType = (isRevealed: boolean) => {
+  return isRevealed ? 'text' : 'password';
+};
 
-const getApiProviderName = (apiKey: ApiKeyState) =>
-  computed(() => {
-    return apiKey.apiProvider ? apiKey.apiProvider.name : '+ Select model';
-  });
+const getApiProviderName = (apiKey: ApiKeyState) => {
+  return apiKey.apiProvider ? apiKey.apiProvider.name : '+ Select model';
+};
 
 onBeforeMount(async () => {
   await setApiKeyFormFields(setFieldValue);
@@ -131,6 +128,7 @@ onBeforeUnmount(() => {
                   class="pr-10"
                   :type="getInputType(apiKey.isRevealed)"
                   v-model="apiKey.key"
+                  @update:model-value="onApiKeyUpdate(apiKey, setFieldValue, values)"
                 />
                 <ButtonIcon
                   type="button"

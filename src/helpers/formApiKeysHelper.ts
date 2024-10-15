@@ -55,6 +55,15 @@ export function onApiKeyAdd(apiKey: ApiKeyState, setFieldValue: Function) {
   }
 }
 
+export function onApiKeyUpdate(apiKey: ApiKeyState, setFieldValue: Function, values: any) {
+  if (values.apiKeys?.[apiKey.id].key && values.apiKeys?.[apiKey.id].apiProviderId) {
+    setFieldValue(`apiKeys.${apiKey.id}`, {
+      key: apiKey.key,
+      apiProviderId: apiKey.apiProvider!.apiProviderId
+    });
+  }
+}
+
 export function onApiKeyRemove(id: number, setValues: Function, values: any) {
   const chatStore = useChatStore();
   const userStore = useUserStore();
