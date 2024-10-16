@@ -14,10 +14,10 @@ import { useChatSidebarStore } from '@/stores/chatSidebarStore';
 import { logoutUserService } from '@/services/authenticationService';
 
 const router = useRouter();
-
 const chatSidebarStore = useChatSidebarStore();
-const { isChatSidebarVisible } = storeToRefs(chatSidebarStore);
-const { toggleChatSidebar } = chatSidebarStore;
+
+const { toggleChatSidebar, toggleModelSidebar } = chatSidebarStore;
+const { isChatSidebarVisible, isModelSidebarVisible } = storeToRefs(chatSidebarStore);
 
 const tooltipSideOffset = 10;
 </script>
@@ -45,13 +45,17 @@ const tooltipSideOffset = 10;
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <ButtonIcon iconName="adjustments-horizontal" />
+            <ButtonIcon
+              iconName="adjustments-horizontal"
+              :class="{ 'bg-secondary': isModelSidebarVisible }"
+              @click="toggleModelSidebar"
+            />
           </TooltipTrigger>
           <TooltipContent
             side="right"
             :sideOffset="tooltipSideOffset"
           >
-            Adjust model
+            Model settings
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
+import DescriptionParagraph from '@/components/custom/description/DescriptionParagraph.vue';
 import CardModelSettingsGeneral from '@/components/custom/card/CardModelSettingsGeneral.vue';
-import { Button } from '@/components/shadcn/button';
 import { Separator } from '@/components/shadcn/separator';
 import {
   Popover,
@@ -18,18 +18,9 @@ import {
 import { ref, computed } from 'vue';
 
 const isCardVisible = ref(false);
-const isAdvancedSettings = ref(false);
-
-const toggleAdvancedSettings = () => {
-  isAdvancedSettings.value = !isAdvancedSettings.value;
-};
 
 const getButtonVariant = computed(() => {
   return isCardVisible.value ? 'secondary' : 'ghost';
-});
-
-const getButtonSettingsName = computed(() => {
-  return isAdvancedSettings.value ? 'General settings' : 'Advanced settings';
 });
 </script>
 
@@ -50,7 +41,7 @@ const getButtonSettingsName = computed(() => {
             align="end"
             side="bottom"
           >
-            Adjust model
+            Quick settings
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -62,23 +53,13 @@ const getButtonSettingsName = computed(() => {
     >
       <div class="p-1">
         <div class="mb-4 flex flex-col gap-y-1.5">
-          <h3 class="text-base font-semibold leading-none tracking-tight">Adjust model</h3>
-          <p class="text-sm text-muted-foreground">
-            Customize the model settings to fit your needs.
-          </p>
+          <h3 class="text-base font-semibold leading-none tracking-tight">Quick settings</h3>
+          <DescriptionParagraph textSize="sm">
+            Quickly change basic model settings here.
+          </DescriptionParagraph>
           <Separator />
         </div>
-        <div class="mb-4">
-          <CardModelSettingsGeneral v-if="!isAdvancedSettings" />
-        </div>
-        <div>
-          <Button
-            size="sm"
-            @click="toggleAdvancedSettings"
-          >
-            {{ getButtonSettingsName }}
-          </Button>
-        </div>
+        <CardModelSettingsGeneral />
       </div>
     </PopoverContent>
   </Popover>

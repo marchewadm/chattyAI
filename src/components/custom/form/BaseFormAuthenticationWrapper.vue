@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DescriptionParagraph from '@/components/custom/description/DescriptionParagraph.vue';
 import { useAuthenticationFormStore } from '@/stores/authenticationFormStore';
 import type { AuthenticationForm } from '@/types/authentication.types';
 
@@ -17,9 +18,9 @@ defineProps<{
         <h2 class="text-3xl font-bold">
           <slot name="formHeader"></slot>
         </h2>
-        <p class="text-balance text-muted-foreground">
+        <DescriptionParagraph class="text-balance">
           <slot name="formSubHeader"></slot>
-        </p>
+        </DescriptionParagraph>
       </div>
       <div class="grid gap-4">
         <slot name="formBody"></slot>
