@@ -1,67 +1,78 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { ApiProvider, ApiProvidersData, ApiKey, ApiKeyData } from '@/types/apiKey';
+import type { ChatRoom, ChatMessageDetails, ChatRoomDetails } from '@/types/chat.types';
+import type { ApiProviderState, ApiProviderDetails } from '@/types/apiKeys.types';
 
 export const useChatStore = defineStore('chat', () => {
-  const apiProvider = ref<string>(); // TODO: use localstorage to save default LLM preference
-  const apiProviders = ref<ApiProvider[]>([]);
-  const apiKeys = ref<ApiKey[]>([]);
+  const aiModel = ref<string | null>(null);
+  const apiProvider = ref<ApiProviderState | null>(null);
+  const apiProviders = ref<ApiProviderState[]>([]);
+  const chatRooms = ref<ChatRoom[]>([]);
+  const chatMessages = ref<ChatMessageDetails[]>([]);
+  const customInstructions = ref<string>('You are a helpful assistant.');
 
-  function setApiProvidersData(apiProvidersData: ApiProvidersData[]) {
-    apiProvidersData.forEach((apiProvider) => {
-      apiProviders.value.push({
-        value: apiProvider.name.toLowerCase(),
-        label: apiProvider.name,
-        isDisabled: false,
-        apiProviderId: apiProvider.id
-      });
+  const resetChatHistory = () => {
+    aiModel.value = null;
+    chatMessages.value = [];
+    customInstructions.value = 'You are a helpful assistant.';
+  };
+
+  const setChatRooms = (chatRoomsData: ChatRoom[]) => {
+    chatRooms.value = chatRoomsData.map((chatRoom) => {
+      return {
+        roomUuid: chatRoom.roomUuid,
+        lastMessage: chatRoom.lastMessage,
+        apiProviderId: chatRoom.apiProviderId
+      };
     });
-  }
+  };
 
-  function setUserApiKeysData(userApiKeysData: ApiKeyData[]) {
-    if (userApiKeysData) {
-      userApiKeysData.forEach((apiKey) => {
-        const apiProvider = apiProviders.value.find(
-          (apiProvider) => apiProvider.value === apiKey.apiProviderLowercaseName
-        );
+  const setChatHistory = (chatRoomDetails: Required<ChatRoomDetails>) => {
+    aiModel.value = chatRoomDetails.aiModel;
+    customInstructions.value = chatRoomDetails.customInstructions;
 
-        if (!apiProvider) {
-          return;
-        }
+    apiProvider.value =
+      apiProviders.value.find((apiProvider) => {
+        return apiProvider.aiModels.includes(chatRoomDetails.aiModel);
+      }) ?? null;
 
-        // Disable the api provider if the user has already added an api key for it to prevent duplicates
-        apiProvider.isDisabled = true;
-
-        apiKeys.value.push({
-          id: apiKeys.value.length,
-          key: apiKey.key,
-          apiProvider,
-          isOpen: false,
-          isRevealed: false
-        });
-      });
-    }
-
-    // Add an empty api key object to the array
-    apiKeys.value.push({
-      id: apiKeys.value.length,
-      key: undefined,
-      apiProvider: undefined,
-      isOpen: false,
-      isRevealed: false
+    chatMessages.value = chatRoomDetails.messages.map((messageObject) => {
+      return {
+        message: messageObject.message,
+        role: messageObject.role
+      };
     });
-  }
+  };
 
-  function resetUserApiKeysData() {
-    apiKeys.value = [];
-  }
+  const setApiProviders = (apiProvidersData: ApiProviderDetails[]) => {
+    apiProviders.value = apiProvidersData.map((apiProvider) => {
+      return {
+        name: apiProvider.name,
+        lowerCaseName: apiProvider.name.toLowerCase(),
+        aiModels: apiProvider.aiModels,
+        apiProviderId: apiProvider.id,
+        isSelected: false
+      };
+    });
+  };
+
+  const updateChatRoomLastMessage = (roomUuid: string, lastMessage: string) => {
+    chatRooms.value = chatRooms.value.map((chatRoom) =>
+      chatRoom.roomUuid === roomUuid ? { ...chatRoom, lastMessage } : chatRoom
+    );
+  };
 
   return {
+    aiModel,
     apiProvider,
     apiProviders,
-    apiKeys,
-    setApiProvidersData,
-    setUserApiKeysData,
-    resetUserApiKeysData
+    chatRooms,
+    chatMessages,
+    customInstructions,
+    resetChatHistory,
+    setChatRooms,
+    setChatHistory,
+    setApiProviders,
+    updateChatRoomLastMessage
   };
 });
