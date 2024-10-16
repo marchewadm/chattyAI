@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import NavigationChat from '@/components/custom/navigation/NavigationChat.vue';
 import SidebarChatOpen from '@/components/custom/sidebar/SidebarChatOpen.vue';
+import SidebarChatCustomizeModel from '@/components/custom/sidebar/SidebarChatCustomizeModel.vue';
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useChatSidebarStore } from '@/stores/chatSidebarStore';
@@ -15,10 +16,11 @@ const isSidebarVisible = computed(() => isChatSidebarVisible.value || isModelSid
   <aside class="flex h-screen">
     <NavigationChat />
     <div
-      class="w-64 p-2 border-r"
+      class="w-72 p-2 border-r"
       v-show="isSidebarVisible"
     >
       <SidebarChatOpen />
+      <SidebarChatCustomizeModel />
     </div>
   </aside>
 </template>
