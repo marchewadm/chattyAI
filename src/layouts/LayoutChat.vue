@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CardModelSettingsContainer from '@/components/custom/card/CardModelSettingsContainer.vue';
-import SidebarChatOptions from '@/components/custom/sidebar/SidebarChatOptions.vue';
+import SidebarChatContainer from '@/components/custom/sidebar/SidebarChatContainer.vue';
 import AlertDialogPassphraseContainer from '@/components/custom/alert-dialog/AlertDialogPassphraseContainer.vue';
 import { ref, onMounted } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
@@ -44,7 +44,7 @@ onBeforeRouteUpdate(() => {
 <template>
   <main class="grid chat-layout">
     <AlertDialogPassphraseContainer />
-    <SidebarChatOptions />
+    <SidebarChatContainer />
     <div
       class="relative h-screen dark:bg-gray-900 flex flex-col overflow-y-auto"
       ref="chatContainer"
