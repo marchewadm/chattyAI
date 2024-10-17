@@ -25,7 +25,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="name"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>What is your name?</FormLabel>
         <FormControl>
           <Input
@@ -41,7 +41,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="email"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Email</FormLabel>
         <FormControl>
           <Input
@@ -57,7 +57,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="password"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Password</FormLabel>
         <FormControl>
           <Input
@@ -72,7 +72,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="password2"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Confirm password</FormLabel>
         <FormControl>
           <Input

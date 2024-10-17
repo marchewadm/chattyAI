@@ -28,7 +28,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="currentPassword"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Current password</FormLabel>
         <FormControl>
           <Input
@@ -43,7 +43,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="newPassword"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>New password</FormLabel>
         <FormControl>
           <Input
@@ -58,7 +58,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="newPassword2"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Confirm password</FormLabel>
         <FormControl>
           <Input

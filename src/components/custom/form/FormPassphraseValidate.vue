@@ -32,7 +32,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="passphrase"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Enter your passphrase</FormLabel>
         <FormControl>
           <Input

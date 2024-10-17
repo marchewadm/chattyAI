@@ -55,7 +55,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="name"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>What is your name?</FormLabel>
         <FormControl>
           <Input
@@ -71,7 +71,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-slot="{ componentField }"
       name="email"
     >
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Email</FormLabel>
         <FormControl>
           <Input
