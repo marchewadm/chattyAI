@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { delay } from '@/utils/utils';
-import { ref, computed, onMounted } from 'vue';
+import IconApiProvider from '@/components/custom/icon/IconApiProvider.vue';
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it';
 import 'highlight.js/styles/base16/material.css';
+import { delay } from '@/utils/utils';
+import { ref, computed, onMounted } from 'vue';
 
 const props = defineProps<{
   message: string;
+  apiProviderId: number;
   isAnimated?: boolean;
 }>();
 
@@ -57,7 +59,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="col-span-2">
+  <div class="col-span-2 flex gap-x-3">
+    <IconApiProvider
+      :apiProviderId="props.apiProviderId"
+      class="flex-shrink-0 mt-1"
+    />
     <div
       class="assistant-message leading-7"
       v-dompurify-html="renderedMessage"

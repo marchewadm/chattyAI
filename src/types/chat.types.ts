@@ -16,12 +16,14 @@ export type ChatRoomDetailsPayload = ChatRoomDetails & {
 };
 
 export type ChatMessage = {
-  roomUuid?: string;
   message: string;
+  roomUuid?: string;
+  apiProviderId?: number;
 };
 
 export type ChatMessageDetails = {
   message: string;
   role: 'user' | 'assistant';
+  apiProviderId?: number;
   isDeliveredRealTime?: boolean;
 };

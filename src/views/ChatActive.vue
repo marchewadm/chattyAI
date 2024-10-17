@@ -37,7 +37,8 @@ const onSendMessage = async (message: string) => {
     chatMessages.value.push({
       message: response.message,
       role: 'assistant',
-      isDeliveredRealTime: true
+      isDeliveredRealTime: true,
+      apiProviderId: response.apiProviderId
     });
 
     updateChatRoomLastMessage(roomUuid, response.message);
@@ -79,6 +80,7 @@ onBeforeRouteLeave(() => {
               v-else
               :message="messageObject.message"
               :isAnimated="messageObject.isDeliveredRealTime"
+              :apiProviderId="messageObject.apiProviderId!"
             />
           </template>
           <div

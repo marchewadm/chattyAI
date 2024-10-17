@@ -42,6 +42,7 @@ const isChatRoomsEmpty = computed(() => chatRooms.value.length < 1);
       :key="chat.roomUuid"
       :chatTitle="chat.lastMessage"
       :chatRoomUuid="chat.roomUuid"
+      :apiProviderId="chat.apiProviderId"
     />
     <p
       class="text-sm italic font-medium mt-5 mx-auto"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
+import IconApiProvider from '@/components/custom/icon/IconApiProvider.vue';
 import { Icon } from '@iconify/vue';
 import { ComboboxLabel } from 'radix-vue';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
@@ -70,8 +71,14 @@ const getButtonIconName = computed(() => {
             v-for="apiProvider in apiProviders"
             :key="apiProvider.apiProviderId"
           >
-            <ComboboxLabel class="text-sm text-gray-500 pl-2 mb-1">
-              {{ apiProvider.name }}
+            <ComboboxLabel class="text-sm text-gray-500 pl-2 mb-1 flex gap-1 items-center">
+              <IconApiProvider
+                :apiProviderId="apiProvider.apiProviderId"
+                size="sm"
+              />
+              <p>
+                {{ apiProvider.name }}
+              </p>
             </ComboboxLabel>
             <CommandItem
               v-for="(model, index) in apiProvider.aiModels"
