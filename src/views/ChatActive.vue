@@ -67,7 +67,7 @@ onBeforeRouteLeave(() => {
   <LayoutChat>
     <template #chatContent>
       <div class="w-1/2 mx-auto">
-        <div class="grid grid-cols-2 auto-rows-min, gap-y-4">
+        <div class="grid grid-cols-2 auto-rows-min gap-y-4">
           <template
             v-for="(messageObject, index) in chatMessages"
             :key="index"

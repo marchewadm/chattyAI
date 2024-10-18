@@ -8,6 +8,7 @@ export const useChatStore = defineStore('chat', () => {
   const apiProvider = ref<ApiProviderState | null>(null);
   const apiProviders = ref<ApiProviderState[]>([]);
   const chatRooms = ref<ChatRoom[]>([]);
+  const isNewChatRoom = ref<boolean>(false);
   const chatMessages = ref<ChatMessageDetails[]>([]);
   const customInstructions = ref<string>('You are a helpful assistant.');
 
@@ -36,12 +37,20 @@ export const useChatStore = defineStore('chat', () => {
         return apiProvider.aiModels.includes(chatRoomDetails.aiModel);
       }) ?? null;
 
-    chatMessages.value = chatRoomDetails.messages.map((messageObject) => {
-      return {
+    chatMessages.value = chatRoomDetails.messages.map((messageObject, idx, array) => {
+      const message: ChatMessageDetails = {
         message: messageObject.message,
         role: messageObject.role,
         apiProviderId: messageObject.apiProviderId
       };
+
+      // If the value of isNewChatRoom is true, the last message in the array is the most recent and was delivered in real-time to the user. This is used to determine if the message should be animated as typewriter text when the user is redirected to the active chat room from creating a new chat room route.
+      if (idx === array.length - 1 && isNewChatRoom.value) {
+        message.isDeliveredRealTime = true;
+        isNewChatRoom.value = false;
+      }
+
+      return message;
     });
   };
 
@@ -68,6 +77,7 @@ export const useChatStore = defineStore('chat', () => {
     apiProvider,
     apiProviders,
     chatRooms,
+    isNewChatRoom,
     chatMessages,
     customInstructions,
     resetChatHistory,

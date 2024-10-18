@@ -1,13 +1,13 @@
+import { toRaw } from 'vue';
 import { storeToRefs } from 'pinia';
+import { HttpStatusCode } from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import { useChatStore } from '@/stores/chatStore';
 import { useAlertDialogStore } from '@/stores/alertDialogStore';
-import { HttpStatusCode } from 'axios';
 import { displayErrorNotification, handleAxiosError } from '@/utils/utils';
 import { getChatHistoryClient, postChatHistoryClient } from '@/api/chatHistoryClient';
 import type { Router } from 'vue-router';
 import type { ChatMessage, ChatRoomDetailsPayload } from '@/types/chat.types';
-import { toRaw } from 'vue';
 
 export async function getChatHistoryService(roomUuid: string, router: Router) {
   try {
