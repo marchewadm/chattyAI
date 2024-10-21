@@ -22,7 +22,7 @@ const { customInstructions } = storeToRefs(chatStore);
     v-show="isModelSidebarVisible"
     @submit.prevent
   >
-    <fieldset class="h-full px-4 pb-4 border rounded-lg flex flex-col">
+    <fieldset class="h-full px-4 pb-4 border rounded-lg flex flex-col overflow-y-auto">
       <legend class="text-base font-semibold mb-1 -ml-1 px-1">Model settings</legend>
       <div class="mb-4">
         <DescriptionParagraph
