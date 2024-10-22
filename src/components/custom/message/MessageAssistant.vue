@@ -20,7 +20,7 @@ const md: MarkdownIt = new MarkdownIt({
     if (lang && hljs.getLanguage(lang)) {
       try {
         return (
-          '<pre class="hljs p-4 rounded-md my-1"><code>' +
+          '<pre class="hljs p-4 rounded-md my-1 whitespace-pre-wrap overflow-x-auto"><code>' +
           hljs.highlight(str, { language: lang }).value +
           '</code></pre>'
         );
@@ -30,7 +30,9 @@ const md: MarkdownIt = new MarkdownIt({
     }
 
     return (
-      '<pre class="hljs p-4 rounded-md my-1"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
+      '<pre class="hljs p-4 rounded-md my-1 whitespace-pre-wrap overflow-x-auto"><code>' +
+      md.utils.escapeHtml(str) +
+      '</code></pre>'
     );
   }
 });
@@ -65,7 +67,7 @@ onMounted(async () => {
       class="flex-shrink-0 mt-1"
     />
     <div
-      class="assistant-message leading-7"
+      class="assistant-message leading-7 overflow-x-auto"
       v-dompurify-html="renderedMessage"
     ></div>
   </div>
@@ -87,6 +89,30 @@ onMounted(async () => {
 
 .assistant-message ul {
   @apply list-disc;
+}
+
+.assistant-message table {
+  @apply min-w-full border;
+}
+
+.assistant-message thead {
+  @apply bg-secondary;
+}
+
+.assistant-message th {
+  @apply px-4 py-2 text-left text-sm font-medium;
+}
+
+.assistant-message td {
+  @apply px-4 py-2 text-sm;
+}
+
+.assistant-message tr {
+  @apply border-t;
+}
+
+.assistant-message tbody tr:nth-child(even) {
+  @apply bg-muted;
 }
 
 code:not(pre code) {
