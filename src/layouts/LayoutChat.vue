@@ -58,7 +58,7 @@ onBeforeRouteUpdate(() => {
         <slot name="chatContent"></slot>
       </div>
       <div class="sticky w-full bg-white dark:bg-inherit bottom-0 z-10">
-        <div class="relative w-1/2 py-3 mx-auto">
+        <div class="relative mx-5 py-3 md:mx-auto md:w-1/2">
           <slot name="textareaContent"></slot>
         </div>
       </div>

@@ -39,7 +39,7 @@ onBeforeRouteUpdate(() => {
       v-model="messageRef"
       @keydown.enter.prevent="sendMessage"
     />
-    <div class="flex absolute top-1/2 left-full -translate-y-1/2">
+    <div class="hidden absolute top-1/2 left-full -translate-y-1/2 md:flex">
       <ButtonChatTextareaAction
         iconName="send-2"
         @click="sendMessage"
