@@ -4,8 +4,13 @@ import SidebarChatContainer from '@/components/custom/sidebar/SidebarChatContain
 import AlertDialogPassphraseContainer from '@/components/custom/alert-dialog/AlertDialogPassphraseContainer.vue';
 import { ref, onMounted } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useChatSidebarStore } from '@/stores/chatSidebarStore';
 
 const chatContainer = ref<HTMLDivElement | null>(null);
+
+const chatSidebarStore = useChatSidebarStore();
+const { isSidebarVisible } = storeToRefs(chatSidebarStore);
 
 const resizeObserver = new ResizeObserver(() => scrollChatToBottom());
 
@@ -47,6 +52,10 @@ onBeforeRouteUpdate(() => {
     <SidebarChatContainer />
     <div
       class="relative h-screen dark:bg-gray-900 flex flex-col overflow-y-auto"
+      :class="{
+        'opacity-50 blur-sm pointer-events-none md:opacity-100 md:blur-0 md:pointer-events-auto':
+          isSidebarVisible
+      }"
       ref="chatContainer"
     >
       <div class="sticky w-full bg-white dark:bg-inherit pt-2 px-2 top-0 z-10">

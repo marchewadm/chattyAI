@@ -1,8 +1,11 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import { useMediaQuery } from '@vueuse/core';
+
+const isHdScreen = useMediaQuery('(min-width: 1280px)');
 
 export const useChatSidebarStore = defineStore('chatSidebar', () => {
-  const isChatSidebarVisible = ref(true);
+  const isChatSidebarVisible = ref(isHdScreen.value ? true : false);
   const isModelSidebarVisible = ref(false);
 
   const toggleChatSidebar = () => {
@@ -21,6 +24,14 @@ export const useChatSidebarStore = defineStore('chatSidebar', () => {
     }
   };
 
+  const toggleSidebar = () => {
+    if (isChatSidebarVisible.value) {
+      toggleChatSidebar();
+    } else {
+      toggleModelSidebar();
+    }
+  };
+
   const isSidebarVisible = computed(
     () => isChatSidebarVisible.value || isModelSidebarVisible.value
   );
@@ -30,6 +41,7 @@ export const useChatSidebarStore = defineStore('chatSidebar', () => {
     isModelSidebarVisible,
     isSidebarVisible,
     toggleChatSidebar,
-    toggleModelSidebar
+    toggleModelSidebar,
+    toggleSidebar
   };
 });
