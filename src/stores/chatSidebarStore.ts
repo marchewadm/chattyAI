@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useChatSidebarStore = defineStore('chatSidebar', () => {
@@ -21,9 +21,14 @@ export const useChatSidebarStore = defineStore('chatSidebar', () => {
     }
   };
 
+  const isSidebarVisible = computed(
+    () => isChatSidebarVisible.value || isModelSidebarVisible.value
+  );
+
   return {
     isChatSidebarVisible,
     isModelSidebarVisible,
+    isSidebarVisible,
     toggleChatSidebar,
     toggleModelSidebar
   };
