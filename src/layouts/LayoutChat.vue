@@ -47,7 +47,7 @@ onBeforeRouteUpdate(() => {
 </script>
 
 <template>
-  <main class="grid chat-layout">
+  <main class="grid grid-cols-auto-1fr">
     <AlertDialogPassphraseContainer />
     <SidebarChatContainer />
     <div
@@ -74,9 +74,3 @@ onBeforeRouteUpdate(() => {
     </div>
   </main>
 </template>
-
-<style scoped>
-.chat-layout {
-  grid-template-columns: auto 1fr;
-}
-</style>

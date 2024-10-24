@@ -115,7 +115,7 @@ onBeforeUnmount(() => {
   <form>
     <div class="flex flex-col gap-2 mb-4 py-1 pl-1 pr-3">
       <div
-        class="grid api-keys-layout gap-2 items-center"
+        class="grid grid-cols-1fr-2auto gap-2 items-center"
         v-for="(apiKey, index) in apiKeys"
         :key="apiKey.id"
       >
@@ -261,9 +261,3 @@ onBeforeUnmount(() => {
     </div>
   </form>
 </template>
-
-<style scoped>
-.api-keys-layout {
-  grid-template-columns: 1fr auto auto;
-}
-</style>
