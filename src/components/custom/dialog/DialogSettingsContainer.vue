@@ -52,7 +52,9 @@ onMounted(() => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-    <DialogContent class="min-w-[600px]">
+    <DialogContent
+      class="h-full min-w-full pt-6 px-3 grid-rows-2auto-1fr justify-center overflow-y-auto sm:p-6 sm:justify-normal lg:h-fit lg:min-w-[600px]"
+    >
       <DialogHeader>
         <DialogTitle>Settings</DialogTitle>
         <DialogDescription>
@@ -60,8 +62,10 @@ onMounted(() => {
         </DialogDescription>
       </DialogHeader>
       <Separator />
-      <div class="h-[360px] grid settings-layout">
-        <div class="mr-6 flex flex-col gap-y-2">
+      <div class="sm:grid sm:grid-cols-auto-1fr lg:h-[360px]">
+        <div
+          class="mb-2 flex gap-x-2 justify-center sm:mb-0 sm:mr-6 sm:gap-x-0 sm:gap-y-2 sm:flex-col sm:justify-normal"
+        >
           <ButtonIcon
             iconName="settings"
             size="sm"
@@ -104,9 +108,3 @@ onMounted(() => {
     </DialogContent>
   </Dialog>
 </template>
-
-<style scoped>
-.settings-layout {
-  grid-template-columns: auto 1fr;
-}
-</style>

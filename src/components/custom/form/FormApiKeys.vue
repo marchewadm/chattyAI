@@ -113,9 +113,9 @@ onBeforeUnmount(() => {
 
 <template>
   <form>
-    <div class="flex flex-col gap-2 mb-4 py-1 pl-1 pr-3">
+    <div class="flex flex-col gap-2 mb-4 py-1 sm:pl-1 sm:pr-3">
       <div
-        class="grid grid-cols-1fr-2auto gap-2 items-center"
+        class="grid grid-cols-1fr-2auto gap-1 items-center sm:gap-2"
         v-for="(apiKey, index) in apiKeys"
         :key="apiKey.id"
       >
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
               <div class="relative flex items-center justify-end">
                 <Input
                   placeholder="Your API Key"
-                  class="pr-10"
+                  class="pr-10 min-w-32"
                   :type="getInputType(apiKey.isRevealed)"
                   v-model="apiKey.key"
                   @update:model-value="onApiKeyUpdate(apiKey, setFieldValue, values)"
