@@ -44,7 +44,7 @@ const onSubmit = form.handleSubmit(async (values) => {
         <FormMessage />
       </FormItem>
     </FormField>
-    <div class="flex gap-2 mt-2 ml-auto">
+    <div class="flex flex-col gap-2 mt-2 sm:ml-auto sm:flex-row">
       <Button
         type="button"
         variant="outline"
