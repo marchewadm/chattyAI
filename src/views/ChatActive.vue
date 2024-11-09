@@ -75,6 +75,7 @@ onBeforeRouteLeave(() => {
             <MessageUser
               v-if="messageObject.role === 'user'"
               :message="messageObject.message"
+              :imageUrl="messageObject.imageUrl"
             />
             <MessageAssistant
               v-else

@@ -40,6 +40,7 @@ export const useChatStore = defineStore('chat', () => {
     chatMessages.value = chatRoomDetails.messages.map((messageObject, idx, array) => {
       const message: ChatMessageDetails = {
         message: messageObject.message,
+        imageUrl: messageObject.imageUrl,
         role: messageObject.role,
         apiProviderId: messageObject.apiProviderId
       };

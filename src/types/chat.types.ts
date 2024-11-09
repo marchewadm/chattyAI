@@ -23,6 +23,7 @@ export type ChatMessage = {
 
 export type ChatMessageDetails = {
   message: string;
+  imageUrl?: string;
   role: 'user' | 'assistant';
   apiProviderId?: number;
   isDeliveredRealTime?: boolean;
