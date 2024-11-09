@@ -35,7 +35,7 @@ onClickOutside(sidebarContainer, () => {
       }"
     >
       <!-- Ensure there is an 18px difference between the width of this wrapper and the container above -->
-      <div class="min-w-[206px] md:min-w-[222px] xl:min-w-[270px]">
+      <div class="h-full min-w-[206px] md:min-w-[222px] xl:min-w-[270px]">
         <SidebarChatOpen />
         <SidebarChatCustomizeModel />
       </div>

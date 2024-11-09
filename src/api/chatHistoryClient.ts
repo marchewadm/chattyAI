@@ -5,7 +5,8 @@ import type { ChatMessage, ChatRoomDetails, ChatRoomDetailsPayload } from '@/typ
 const PREFIX_URL = `${import.meta.env.VITE_BACKEND_URL}/chat-history`;
 
 const CHAT_API_PROVIDERS_URLS: Record<string, string> = {
-  openai: `${import.meta.env.VITE_BACKEND_URL}/openai/chat`
+  openai: `${import.meta.env.VITE_BACKEND_URL}/openai/chat`,
+  gemini: `${import.meta.env.VITE_BACKEND_URL}/gemini/chat`
 };
 
 export async function getChatHistoryClient(roomUuid: string, accessToken: string) {
