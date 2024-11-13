@@ -10,7 +10,7 @@ defineProps<{
     <img
       v-if="imageUrl"
       :src="imageUrl"
-      class="mb-2 rounded-lg cursor-pointer"
+      class="mb-2 rounded-lg cursor-pointer hover:opacity-70 transition-opacity duration-200"
       v-viewer
     />
     <div class="ml-auto w-fit max-w-full bg-secondary py-2 px-4 rounded-2xl break-words">
