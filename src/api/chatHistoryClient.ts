@@ -5,8 +5,8 @@ import type { ChatMessage, ChatRoomDetails, ChatRoomDetailsPayload } from '@/typ
 const PREFIX_URL = `${import.meta.env.VITE_BACKEND_URL}/chat-history`;
 
 const CHAT_API_PROVIDERS_URLS: Record<string, string> = {
-  openai: `${import.meta.env.VITE_BACKEND_URL}/openai/chat`,
-  gemini: `${import.meta.env.VITE_BACKEND_URL}/gemini/chat`
+  openai: `${import.meta.env.VITE_BACKEND_URL}/openai`,
+  gemini: `${import.meta.env.VITE_BACKEND_URL}/gemini`
 };
 
 export async function getChatHistoryClient(roomUuid: string, accessToken: string) {
@@ -21,8 +21,22 @@ export async function postChatHistoryClient(
   accessToken: string
 ) {
   return axios.post<Required<ChatMessage>>(
-    CHAT_API_PROVIDERS_URLS[provider.lowerCaseName],
+    `${CHAT_API_PROVIDERS_URLS[provider.lowerCaseName]}/chat`,
     chatHistoryPayload,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    }
+  );
+}
+
+export async function postChatHistoryImageClient(
+  formDataPayload: FormData,
+  provider: ApiProviderState,
+  accessToken: string
+) {
+  return axios.post<{ imageUrl: string }>(
+    `${CHAT_API_PROVIDERS_URLS[provider.lowerCaseName]}/upload-image`,
+    formDataPayload,
     {
       headers: { Authorization: `Bearer ${accessToken}` }
     }

@@ -2,8 +2,8 @@
 import typewriterData from '@/assets/typewriterData.json';
 import LayoutChat from '@/layouts/LayoutChat.vue';
 import TextareaChat from '@/components/custom/textarea/TextareaChat.vue';
+import MessageUserPending from '@/components/custom/message/MessageUserPending.vue';
 import ButtonChatTopicSuggestion from '@/components/custom/button/ButtonChatTopicSuggestion.vue';
-import { Icon } from '@iconify/vue';
 import { ref, onMounted, onBeforeMount, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMotion } from '@vueuse/motion';
@@ -13,7 +13,8 @@ import { useChatStore } from '@/stores/chatStore';
 import { postChatHistoryService } from '@/services/chatHistoryService';
 
 const isPending = ref(false);
-const messageToSend = ref('');
+const pendingMessage = ref('');
+const pendingImageUrl = ref<string | undefined>(undefined);
 const greetingHeadingRef = ref<HTMLHeadingElement | null>(null);
 const buttonsContainerRef = ref<HTMLDivElement | null>(null);
 
@@ -46,20 +47,22 @@ const generateRandomButtonTopicSuggestions = () => {
   }
 };
 
-const onSendMessage = async (message: string) => {
+const onSendMessage = async (message: string, imageUrl?: string, imageFile?: File) => {
   if (isPending.value) return;
 
-  messageToSend.value = message;
+  pendingMessage.value = message;
+  pendingImageUrl.value = imageUrl;
   isPending.value = true;
 
-  const response = await postChatHistoryService({ message }, router);
+  const response = await postChatHistoryService({ message }, router, imageFile);
 
   if (response) {
     isNewChatRoom.value = true;
     router.push({ name: 'ChatActive', params: { room_uuid: response.roomUuid } });
   } else {
     isPending.value = false;
-    messageToSend.value = '';
+    pendingMessage.value = '';
+    pendingImageUrl.value = undefined;
   }
 };
 
@@ -123,17 +126,10 @@ onMounted(() => {
         class="grid grid-cols-2 auto-rows-min gap-y-4 mx-5 md:mx-auto md:w-1/2"
         v-else
       >
-        <div class="relative mb-10 col-start-2 justify-self-end">
-          <div class="w-fit max-w-full bg-secondary py-2 px-4 rounded-2xl break-words">
-            <p class="leading-7">
-              {{ messageToSend }}
-            </p>
-          </div>
-          <Icon
-            icon="tabler:loader-2"
-            class="absolute w-4 h-4 my-2 right-0 animate-spin"
-          />
-        </div>
+        <MessageUserPending
+          :pendingMessage="pendingMessage"
+          :pendingImageUrl="pendingImageUrl"
+        />
       </div>
     </template>
     <template #textareaContent>

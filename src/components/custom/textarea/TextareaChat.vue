@@ -18,12 +18,13 @@ import { imageSchema } from '@/schemas/chat.schemas';
 import { displayErrorNotification } from '@/utils/utils';
 
 const emit = defineEmits<{
-  sendMessage: [message: string, imageUrl?: string];
+  sendMessage: [message: string, imageUrl?: string, imageFile?: File];
 }>();
 
 const messageToSend = ref('');
 const isImageLoading = ref(false);
-const imageUrl = ref<string | null>(null);
+const imageUrl = ref<string | undefined>(undefined);
+const imageFile = ref<File | undefined>(undefined);
 const textareaEl = ref<HTMLTextAreaElement | null>(null);
 const fileInputEl = ref<HTMLInputElement | null>(null);
 
@@ -34,7 +35,7 @@ const handleClickOnInput = () => {
 };
 
 const handleResetImage = () => {
-  imageUrl.value = null;
+  imageUrl.value = undefined;
 };
 
 const toggleImageLoading = () => {
@@ -44,7 +45,10 @@ const toggleImageLoading = () => {
 const sendMessage = () => {
   if (!messageToSend.value) return;
 
-  emit('sendMessage', messageToSend.value);
+  emit('sendMessage', messageToSend.value, imageUrl.value, imageFile.value);
+
+  imageUrl.value = undefined;
+  imageFile.value = undefined;
   messageToSend.value = '';
 };
 
@@ -64,6 +68,8 @@ const handleFileChange = () => {
   if (!file || !validateFile(file)) return;
 
   toggleImageLoading();
+
+  imageFile.value = file;
   imageUrl.value = URL.createObjectURL(file);
 };
 

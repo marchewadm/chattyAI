@@ -3,7 +3,7 @@ import LayoutChat from '@/layouts/LayoutChat.vue';
 import TextareaChat from '@/components/custom/textarea/TextareaChat.vue';
 import MessageUser from '@/components/custom/message/MessageUser.vue';
 import MessageAssistant from '@/components/custom/message/MessageAssistant.vue';
-import { Icon } from '@iconify/vue';
+import MessageUserPending from '@/components/custom/message/MessageUserPending.vue';
 import { ref } from 'vue';
 import { useRoute, useRouter, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -21,19 +21,21 @@ const { chatMessages } = storeToRefs(chatStore);
 const { resetChatHistory, updateChatRoomLastMessage } = chatStore;
 
 const isPending = ref(false);
-const messageToSend = ref('');
+const pendingMessage = ref('');
+const pendingImageUrl = ref<string | undefined>(undefined);
 
-const onSendMessage = async (message: string) => {
+const onSendMessage = async (message: string, imageUrl?: string, imageFile?: File) => {
   if (isPending.value) return;
 
-  messageToSend.value = message;
+  pendingMessage.value = message;
+  pendingImageUrl.value = imageUrl;
   isPending.value = true;
 
   const roomUuid = route.params.room_uuid as string;
-  const response = await postChatHistoryService({ roomUuid, message }, router);
+  const response = await postChatHistoryService({ roomUuid, message }, router, imageFile);
 
   if (response) {
-    chatMessages.value.push({ message, role: 'user' });
+    chatMessages.value.push({ message, role: 'user', imageUrl });
     chatMessages.value.push({
       message: response.message,
       role: 'assistant',
@@ -45,7 +47,8 @@ const onSendMessage = async (message: string) => {
   }
 
   isPending.value = false;
-  messageToSend.value = '';
+  pendingMessage.value = '';
+  pendingImageUrl.value = undefined;
 };
 
 onBeforeRouteUpdate(async (to) => {
@@ -84,20 +87,11 @@ onBeforeRouteLeave(() => {
               :apiProviderId="messageObject.apiProviderId!"
             />
           </template>
-          <div
-            class="relative mb-10 col-start-2 justify-self-end"
-            v-show="isPending"
-          >
-            <div class="w-fit max-w-full bg-secondary py-2 px-4 rounded-2xl break-words">
-              <p class="leading-7">
-                {{ messageToSend }}
-              </p>
-            </div>
-            <Icon
-              icon="tabler:loader-2"
-              class="absolute w-4 h-4 my-2 right-0 animate-spin"
-            />
-          </div>
+          <MessageUserPending
+            :pendingMessage="pendingMessage"
+            :pendingImageUrl="pendingImageUrl"
+            v-if="isPending"
+          />
         </div>
       </div>
     </template>

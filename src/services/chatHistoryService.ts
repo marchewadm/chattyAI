@@ -5,7 +5,11 @@ import { useUserStore } from '@/stores/userStore';
 import { useChatStore } from '@/stores/chatStore';
 import { useAlertDialogStore } from '@/stores/alertDialogStore';
 import { displayErrorNotification, handleAxiosError } from '@/utils/utils';
-import { getChatHistoryClient, postChatHistoryClient } from '@/api/chatHistoryClient';
+import {
+  getChatHistoryClient,
+  postChatHistoryClient,
+  postChatHistoryImageClient
+} from '@/api/chatHistoryClient';
 import type { Router } from 'vue-router';
 import type { ChatMessage, ChatRoomDetailsPayload } from '@/types/chat.types';
 
@@ -28,16 +32,34 @@ export async function getChatHistoryService(roomUuid: string, router: Router) {
   }
 }
 
-export async function postChatHistoryService({ roomUuid, message }: ChatMessage, router: Router) {
+export async function postChatHistoryService(
+  { roomUuid, message }: ChatMessage,
+  router: Router,
+  image?: File
+) {
   try {
     const chatStore = useChatStore();
     const userStore = useUserStore();
+    let imageUrl: string | undefined;
 
     const { accessToken } = storeToRefs(userStore);
     const { aiModel, apiProvider, chatMessages, customInstructions } = storeToRefs(chatStore);
 
     if (!apiProvider.value || !aiModel.value) {
       return displayErrorNotification('You must select an AI model before sending a message.');
+    }
+
+    if (image) {
+      const formData = new FormData();
+      formData.append('image', image);
+
+      const response = await postChatHistoryImageClient(
+        formData,
+        apiProvider.value,
+        accessToken.value!
+      );
+
+      imageUrl = response.data.imageUrl;
     }
 
     const chatHistoryPayload: ChatRoomDetailsPayload = {
@@ -48,7 +70,7 @@ export async function postChatHistoryService({ roomUuid, message }: ChatMessage,
       messages: structuredClone(toRaw(chatMessages.value))
     };
 
-    chatHistoryPayload.messages.push({ message, role: 'user' });
+    chatHistoryPayload.messages.push({ message, role: 'user', imageUrl });
 
     const response = await postChatHistoryClient(
       chatHistoryPayload,
