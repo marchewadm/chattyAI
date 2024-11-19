@@ -35,3 +35,19 @@
 //     }
 //   }
 // }
+
+// Example usage in a test
+
+Cypress.Commands.add(
+  'containsClasses',
+  { prevSubject: 'element' },
+  (subject, expectedClasses: Array<string>) => {
+    const classList = Array.from(subject[0].classList);
+
+    const hasAllClasses = expectedClasses.every((expectedClass) =>
+      classList.includes(expectedClass)
+    );
+
+    return cy.wrap(hasAllClasses);
+  }
+);
