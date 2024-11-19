@@ -21,6 +21,7 @@ import './commands';
 
 // Import styles
 import '../../src/assets/index.css';
+import 'highlight.js/styles/base16/material.css';
 
 import { mount } from 'cypress/vue';
 
