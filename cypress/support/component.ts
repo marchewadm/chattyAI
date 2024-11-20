@@ -23,7 +23,34 @@ import './commands';
 import '../../src/assets/index.css';
 import 'highlight.js/styles/base16/material.css';
 
+import 'cypress-real-events';
+
 import { mount } from 'cypress/vue';
+
+import { setActivePinia, createPinia } from 'pinia';
+import type { DefineComponent } from 'vue';
+import type { Pinia } from 'pinia';
+
+// Pinia plugin
+let pinia: Pinia;
+
+beforeEach(() => {
+  pinia = createPinia();
+  setActivePinia(pinia);
+});
+
+function mountWithPinia(
+  Comp: DefineComponent<any, any, any>,
+  options?: Parameters<typeof mount>[1]
+): Cypress.Chainable {
+  return mount(Comp, {
+    ...options,
+    global: {
+      ...options?.global,
+      plugins: [...(options?.global?.plugins ?? []), pinia]
+    }
+  });
+}
 
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
@@ -33,11 +60,10 @@ declare global {
   namespace Cypress {
     interface Chainable {
       mount: typeof mount;
+      mountWithPinia: typeof mountWithPinia;
     }
   }
 }
 
 Cypress.Commands.add('mount', mount);
-
-// Example use:
-// cy.mount(MyComponent)
+Cypress.Commands.add('mountWithPinia', mountWithPinia);
